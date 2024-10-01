@@ -1,0 +1,14 @@
+.centered-container {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+}
+
+.dag-container {
+  border: 3px solid black; /* Adds a black border */
+  align-self: center;
+  padding: 2px; /* Adds padding */
+  margin: 2px 0; /* Adds margin */
+  width: fit-content; /* Adjusts the width to fit the content */
+  display: inline-block; /* Makes the container shrink to the DAG size */
+}
