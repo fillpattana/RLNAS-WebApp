@@ -1,24 +1,68 @@
+// LIBS
 import { useEffect, useRef } from "react";
 import { MultiDirectedGraph } from "graphology";
 import Sigma from "sigma";
 import { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
+import { EdgeArrowProgram } from "sigma/rendering";
 import forceAtlas2 from "graphology-layout-forceatlas2";
+// SAMPS
 import nodeData from "../assets/nodeData.json"; //first sample with only fully connected
 import nodeDataWithConv from "../assets/nodeDataWithConv.json"; //Second sample that includes conv, only 2 nodes.
 import nodeDataWithConv2 from "../assets/nodeDataWithConv2.json"; //modified sample with more layer varieties and nodes.
+import nodeDataWithConv3 from "../assets/nodeDataWithConv3.json"; //modified sample with more nodes in same layer and nodes.
+// COMPS
+import topSort from "./dagComps/topologicalSort";
 
 //Sigma canvas = size of canvas for graph to be drawn
 const sigmaStyle = { height: "500px", width: "500px" };
 
-// Function for graph initialization
-const createGraph = (graph, data) => {
-  // ddd nodes
-  nodeDataWithConv2.Graph.nodes.forEach((node, index) => {
+// Function for graph init for lib layouts
+const createGraph1 = (graph, data) => {
+  // add nodes
+  data.Graph.nodes.forEach((node, index) => {
     graph.addNode(index.toString(), {
       label: `Node ${index}: ${node.type}`,
       size: 15 + node.params.weights.flat().length,
       x: Math.random() * 10, // Spread out the nodes more
       y: Math.random() * 10,
+      color: node.type === "fully connected" ? "#4065fa" : "#FA4F40",
+    });
+  });
+
+  // add edges
+  data.Graph.edges.senders.forEach((sender, idx) => {
+    const receiver = data.Graph.edges.receivers[idx];
+    if (
+      graph.hasNode(sender.toString()) &&
+      graph.hasNode(receiver.toString())
+    ) {
+      graph.addEdgeWithKey(
+        `edge${idx}`,
+        sender.toString(),
+        receiver.toString(),
+        {
+          label: `Edge ${sender}-${receiver}`,
+          color: "#4FA4F0",
+          size: 3,
+        }
+      );
+    }
+  });
+};
+
+// Function for graph init with top sort potentially the default layout
+const createGraph2 = (graph, data) => {
+  //topological sort
+  const layerAssignments = topSort(data);
+
+  // add nodes by layers
+  data.Graph.nodes.forEach((node, index) => {
+    const layer = layerAssignments.get(index);
+    graph.addNode(index.toString(), {
+      label: `Node ${index}: ${node.type}`,
+      size: 15 + node.params.weights.flat().length,
+      x: layer * 100, // Spread horizontally by layer
+      y: index * 50, // vertical spacings
       color: node.type === "fully connected" ? "#4065fa" : "#FA4F40",
     });
   });
@@ -51,19 +95,30 @@ function DAG() {
   useEffect(() => {
     const graph = new MultiDirectedGraph();
 
+    // // Init graph type and pass json doc for graph's data
+    // createGraph1(graph, nodeDataWithConv2);
+
+    // // Init a sigma instance
+    // const renderer = new Sigma(graph, containerRef.current, {
+    //   defaultEdgeType: "curve", // Enable curved edges
+    //   edgeProgramClasses: { curve: EdgeCurvedArrowProgram },
+    // });
+
+    // // Apply ForceAtlas2 layout to spread nodes out
+    // forceAtlas2.assign(graph, {
+    //   iterations: 200,
+    //   settings: { gravity: 1, scalingRatio: 5 },
+    // });
+
+    //-----------------with top sort layout-----------------//
+
     // Init graph type and pass json doc for graph's data
-    createGraph(graph, nodeDataWithConv2);
+    createGraph2(graph, nodeDataWithConv3);
 
     // Init a sigma instance
     const renderer = new Sigma(graph, containerRef.current, {
       defaultEdgeType: "curve", // Enable curved edges
       edgeProgramClasses: { curve: EdgeCurvedArrowProgram },
-    });
-
-    // Apply ForceAtlas2 layout to spread nodes out
-    forceAtlas2.assign(graph, {
-      iterations: 200,
-      settings: { gravity: 1, scalingRatio: 5 },
     });
 
     sigmaInstanceRef.current = renderer;
