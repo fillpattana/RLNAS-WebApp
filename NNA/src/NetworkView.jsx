@@ -1,5 +1,5 @@
 import { useState } from "react";
-import nodeData from "./assets/nodeData.json";
+import nodeData from "./assets/nodeDataWithConv3.json";
 import trainingData from "./assets/trainingData.json";
 import Chart from "./components/Chart";
 import DAG from "./components/DAG";
