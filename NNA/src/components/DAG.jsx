@@ -122,7 +122,7 @@ function DAG({ onNodeClick }) {
     // Init a sigma instance
     const renderer = new Sigma(graph, containerRef.current, {
       defaultEdgeType: "curve", // Enable curved edges
-      edgeProgramClasses: { curve: EdgeCurvedArrowProgram },
+      edgeProgramClasses: { curve: EdgeArrowProgram },
     });
 
     // Add event listener for clicking on nodes
