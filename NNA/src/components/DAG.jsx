@@ -1,246 +1,156 @@
-import nodeData from "../assets/nodeData.json";
-import nodeDataConv from "../assets/nodeDataWithConv.json";
-import { useEffect, useState } from "react";
+// LIBS
+import { useEffect, useRef, useMemo, useState } from "react";
 import { MultiDirectedGraph } from "graphology";
-import {
-  SigmaContainer,
-  useLoadGraph,
-  ControlsContainer,
-  FullScreenControl,
-  ZoomControl,
-  useRegisterEvents,
-  useSigma,
-} from "@react-sigma/core";
-import "@react-sigma/core/lib/react-sigma.min.css";
+import Sigma from "sigma";
+import { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
+import { EdgeArrowProgram } from "sigma/rendering";
 import forceAtlas2 from "graphology-layout-forceatlas2";
+// SAMPS
+import nodeData from "../assets/nodeData.json"; //first sample with only fully connected
+import nodeDataWithConv from "../assets/nodeDataWithConv.json"; //Second sample that includes conv, only 2 nodes.
+import nodeDataWithConv2 from "../assets/nodeDataWithConv2.json"; //modified sample with more layer varieties and nodes.
+import nodeDataWithConv3 from "../assets/nodeDataWithConv3.json"; //modified sample with more nodes in same layer and nodes.
+// COMPS
+import topSort from "./dagComps/topologicalSort";
 
-const sigmaStyle = { height: "800px", width: "800px" };
+//Sigma canvas = size of canvas for graph to be drawn
+const sigmaStyle = { height: "500px", width: "500px" };
 
-// No Layout + Fully Connected Only
-export const LoadMultiDirectedGraph = () => {
-  const loadGraph = useLoadGraph();
+// Function for graph init for lib layouts
+// const createGraph1 = (graph, data) => {
+//   // add nodes
+//   data.Graph.nodes.forEach((node, index) => {
+//     graph.addNode(index.toString(), {
+//       label: `Node ${index}: ${node.type}`,
+//       size: 15 + node.params.weights.flat().length,
+//       x: Math.random() * 10, // Spread out the nodes more
+//       y: Math.random() * 10,
+//       color: node.type === "fully connected" ? "#4065fa" : "#FA4F40",
+//     });
+//   });
 
-  useEffect(() => {
-    const graph = new MultiDirectedGraph();
+//   // add edges
+//   data.Graph.edges.senders.forEach((sender, idx) => {
+//     const receiver = data.Graph.edges.receivers[idx];
+//     if (
+//       graph.hasNode(sender.toString()) &&
+//       graph.hasNode(receiver.toString())
+//     ) {
+//       graph.addEdgeWithKey(
+//         `edge${idx}`,
+//         sender.toString(),
+//         receiver.toString(),
+//         {
+//           label: `Edge ${sender}-${receiver}`,
+//           color: "#4FA4F0",
+//           size: 3,
+//         }
+//       );
+//     }
+//   });
+// };
 
-    // Add nodes
-    nodeData.Graph.nodes.forEach((node, index) => {
-      console.log(`Adding node ${index}`);
-      graph.addNode(index.toString(), {
-        label: `Node ${index}: ${node.type}`,
-        size: 15 + node.weights[0].length, // Adjust size based on number of weights
-        x: Math.random(),
-        y: Math.random(),
-        color: "#FA4F40",
-      });
+// Function for graph init with top sort potentially the default layout
+const createGraph2 = (graph, data, topSortLayout) => {
+  // add nodes by layers
+  data.Graph.nodes.forEach((node, index) => {
+    const layer = topSortLayout.get(index);
+    graph.addNode(index.toString(), {
+      label: `Node ${index}`,
+      size: 15 + node.params.weights.flat().length,
+      x: layer * 100, // Spread horizontally by layer
+      y: index * 50, // vertical spacings
+      color: node.type === "fully connected" ? "#4065fa" : "#FA4F40",
     });
+  });
 
-    // Log and check before adding edges
-    nodeData.Graph.edges.senders.forEach((sender, idx) => {
-      const receiver = nodeData.Graph.edges.receivers[idx];
-      console.log(`Adding edge from ${sender} to ${receiver}`);
-      console.log(`Edge Number: ${idx}`);
-      if (
-        graph.hasNode(sender.toString()) &&
-        graph.hasNode(receiver.toString())
-      ) {
-        graph.addEdgeWithKey(
-          `edge${idx}`,
-          sender.toString(),
-          receiver.toString(),
-          {
-            label: `Edge ${sender}-${receiver}`,
-            color: "#4FA4F0",
-          }
-        );
-      } else {
-        console.error(`Node ${sender} or ${receiver} not found`);
-      }
-    });
-
-    loadGraph(graph);
-  }, [loadGraph]);
-
-  return null;
-};
-//
-//Library Node Auto Layout Without Conv
-export const LoadLibLayoutGraph = () => {
-  const loadGraph = useLoadGraph();
-
-  useEffect(() => {
-    const graph = new MultiDirectedGraph();
-
-    // Add nodes
-    nodeDataConv.Graph.nodes.forEach((node, index) => {
-      graph.addNode(index.toString(), {
-        label: `Node ${index}: ${node.type}`,
-        size: 15 + node.params.weights[0].length,
-        x: Math.random(), // Initial random positions
-        y: Math.random(),
-        color: "#FA4F40",
-        adjustSizes: true,
-      });
-    });
-
-    // Add edges
-    nodeData.Graph.edges.senders.forEach((sender, idx) => {
-      const receiver = nodeData.Graph.edges.receivers[idx];
-      if (
-        graph.hasNode(sender.toString()) &&
-        graph.hasNode(receiver.toString())
-      ) {
-        graph.addEdgeWithKey(
-          `edge${idx}`,
-          sender.toString(),
-          receiver.toString(),
-          {
-            label: `Edge ${sender}-${receiver}`,
-            color: "#4FA4F0",
-            size: 3,
-          }
-        );
-      }
-    });
-
-    // Apply ForceAtlas2 layout
-    forceAtlas2.assign(graph, {
-      iterations: 50,
-      settings: { gravity: 1, scalingRatio: 2 },
-    });
-
-    loadGraph(graph);
-  }, [loadGraph]);
-
-  return null;
-};
-
-// Library Node Auto Layout With Conv
-export const LoadLibLayoutGraph2 = () => {
-  const loadGraph = useLoadGraph();
-
-  useEffect(() => {
-    const graph = new MultiDirectedGraph();
-
-    // Add nodes
-    nodeDataConv.Graph.nodes.forEach((node, index) => {
-      let color = "#68696c"; // Default color
-
-      // Adjust color based on the type of the layer
-      if (node.type === "fully connected") {
-        color = "#4065fa";
-        // size = node.params.weights.flat().length + 10;
-      } else if (node.type === "convolutional") {
-        color = "#FA4F40";
-        // size = node.params.weights.flat().length + 10;
-      }
-
-      // Add the node to the graph
-      graph.addNode(index.toString(), {
-        label: `Node ${index}: ${node.type}`,
-        size: node.params.weights.flat().length + 10,
-        x: Math.random(), // Initial random positions
-        y: Math.random(),
-        color: color,
-        adjustSizes: true,
-      });
-    });
-
-    // Add edges
-    nodeData.Graph.edges.senders.forEach((sender, idx) => {
-      const receiver = nodeData.Graph.edges.receivers[idx];
-      if (
-        graph.hasNode(sender.toString()) &&
-        graph.hasNode(receiver.toString())
-      ) {
-        graph.addDirectedEdgeWithKey(
-          `edge${idx}`,
-          sender.toString(),
-          receiver.toString(),
-          {
-            label: `Edge ${sender}-${receiver}`,
-            color: "#4FA4F0",
-            size: 3,
-            defaultEdgeType: "curve",
-          }
-        );
-      }
-    });
-
-    // Apply ForceAtlas2 layout
-    forceAtlas2.assign(graph, {
-      iterations: 50,
-      settings: { gravity: 1, scalingRatio: 2 },
-    });
-
-    loadGraph(graph);
-  }, [loadGraph]);
-
-  return null;
-};
-
-export const DragandDrop = () => {
-  const registerEvents = useRegisterEvents();
-  const sigma = useSigma();
-  const [draggedNode, setDraggedNode] = useState(null);
-
-  useEffect(() => {
-    // Register the events
-    registerEvents({
-      downNode: (e) => {
-        setDraggedNode(e.node);
-        sigma.getGraph().setNodeAttribute(e.node, "highlighted", true);
-      },
-      // On mouse move, if the drag mode is enabled, we change the position of the draggedNode
-      mousemovebody: (e) => {
-        if (!draggedNode) return;
-        // Get new position of node
-        const pos = sigma.viewportToGraph(e);
-        sigma.getGraph().setNodeAttribute(draggedNode, "x", pos.x);
-        sigma.getGraph().setNodeAttribute(draggedNode, "y", pos.y);
-
-        // Prevent sigma to move camera:
-        e.preventSigmaDefault();
-        e.original.preventDefault();
-        e.original.stopPropagation();
-      },
-      // On mouse up, we reset the autoscale and the dragging mode
-      mouseup: () => {
-        if (draggedNode) {
-          setDraggedNode(null);
-          sigma.getGraph().removeNodeAttribute(draggedNode, "highlighted");
+  // add edges
+  data.Graph.edges.senders.forEach((sender, idx) => {
+    const receiver = data.Graph.edges.receivers[idx];
+    if (
+      graph.hasNode(sender.toString()) &&
+      graph.hasNode(receiver.toString())
+    ) {
+      graph.addEdgeWithKey(
+        `edge${idx}`,
+        sender.toString(),
+        receiver.toString(),
+        {
+          label: `Edge ${sender}-${receiver}`,
+          color: "#4FA4F0",
+          size: 3,
         }
-      },
-      // Disable the autoscale at the first down interaction
-      mousedown: () => {
-        if (!sigma.getCustomBBox()) sigma.setCustomBBox(sigma.getBBox());
-      },
-    });
-  }, [registerEvents, sigma, draggedNode]);
-
-  return null;
+      );
+    }
+  });
 };
 
-function DAG() {
-  return (
-    <SigmaContainer
-      graph={MultiDirectedGraph}
-      style={sigmaStyle}
-      settings={{
-        allowInvalidContainer: true,
-      }}
-    >
-      {/* <LoadNormalGraph /> */}
-      {/* <LoadMultiDirectedGraph /> */}
-      {/* <LoadLibLayoutGraph /> */}
-      <LoadLibLayoutGraph2 />
-      <DragandDrop />
-      <ControlsContainer position={"bottom-right"}>
-        <ZoomControl />
-        <FullScreenControl />
-      </ControlsContainer>
-    </SigmaContainer>
-  );
+function DAG({ onNodeClick }) {
+  const containerRef = useRef(null); //stores the HTML where the sigma graph will be drawn
+  const sigmaInstanceRef = useRef(null); //stores the graph itself (change graph UI here)
+  const [graphData, setGraphData] = useState(nodeDataWithConv3); //preparation for realtime updates
+
+  // Memoize top sort layout to only recalculate when data changes
+  const topSortLayout = useMemo(() => {
+    console.log("Recomputing layers");
+    return topSort(graphData);
+  }, [graphData]);
+
+  useEffect(() => {
+    const graph = new MultiDirectedGraph();
+
+    // // Init graph type and pass json doc for graph's data
+    // createGraph1(graph, nodeDataWithConv2);
+
+    // // Init a sigma instance
+    // const renderer = new Sigma(graph, containerRef.current, {
+    //   defaultEdgeType: "curve", // Enable curved edges
+    //   edgeProgramClasses: { curve: EdgeCurvedArrowProgram },
+    // });
+
+    // // Apply ForceAtlas2 layout to spread nodes out
+    // forceAtlas2.assign(graph, {
+    //   iterations: 200,
+    //   settings: { gravity: 1, scalingRatio: 5 },
+    // });
+
+    //-----------------with top sort layout-----------------//
+
+    // Init graph type and pass json doc for graph's data
+    createGraph2(graph, graphData, topSortLayout);
+
+    // Init a sigma instance
+    const renderer = new Sigma(graph, containerRef.current, {
+      defaultEdgeType: "curve", // Enable curved edges
+      edgeProgramClasses: { curve: EdgeArrowProgram },
+    });
+
+    // Add event listener for clicking on nodes
+    renderer.on(
+      "clickNode",
+      (event) => {
+        const clickedNodeId = event.node;
+        const nodeData = graphData.Graph.nodes[clickedNodeId];
+        onNodeClick({
+          id: clickedNodeId,
+          type: nodeData.type,
+          activation: nodeData.activation.type,
+          weights: nodeData.params.weights,
+          biases: nodeData.params.biases,
+        });
+      },
+      { passive: true }
+    );
+
+    sigmaInstanceRef.current = renderer;
+
+    // Clean up when the component unmounts
+    return () => {
+      renderer.kill();
+    };
+  }, [onNodeClick]);
+
+  return <div ref={containerRef} style={sigmaStyle}></div>; //returning div for SigmaJs=direct physical manipulation of the graph's canvas
 }
 
 export default DAG;
