@@ -7,8 +7,6 @@ import { EdgeArrowProgram } from "sigma/rendering";
 import forceAtlas2 from "graphology-layout-forceatlas2";
 // SAMPS
 import nodeData from "../assets/nodeData.json"; //first sample with only fully connected
-import nodeDataWithConv from "../assets/nodeDataWithConv.json"; //Second sample that includes conv, only 2 nodes.
-import nodeDataWithConv2 from "../assets/nodeDataWithConv2.json"; //modified sample with more layer varieties and nodes.
 import nodeDataWithConv3 from "../assets/nodeDataWithConv3.json"; //modified sample with more nodes in same layer and nodes.
 // COMPS
 import topSort from "./dagComps/topologicalSort";
@@ -16,7 +14,7 @@ import topSort from "./dagComps/topologicalSort";
 //Sigma canvas = size of canvas for graph to be drawn
 const sigmaStyle = { height: "500px", width: "500px" };
 
-// Function for graph init for lib layouts
+// Function for graph init using lib layouts
 // const createGraph1 = (graph, data) => {
 //   // add nodes
 //   data.Graph.nodes.forEach((node, index) => {
@@ -51,10 +49,11 @@ const sigmaStyle = { height: "500px", width: "500px" };
 // };
 
 // Function for graph init with top sort potentially the default layout
-const createGraph2 = (graph, data, topSortLayout) => {
+
+const createGraph2 = (graph, data, sortingAlgo) => {
   // add nodes by layers
   data.Graph.nodes.forEach((node, index) => {
-    const layer = topSortLayout.get(index);
+    const layer = sortingAlgo.get(index);
     graph.addNode(index.toString(), {
       label: `Node ${index}`,
       size: 15 + node.params.weights.flat().length,
@@ -90,31 +89,10 @@ function DAG({ onNodeClick }) {
   const sigmaInstanceRef = useRef(null); //stores the graph itself (change graph UI here)
   const [graphData, setGraphData] = useState(nodeDataWithConv3); //preparation for realtime updates
 
-  // Memoize top sort layout to only recalculate when data changes
-  const topSortLayout = useMemo(() => {
-    console.log("Recomputing layers");
-    return topSort(graphData);
-  }, [graphData]);
+  const topSortLayout = topSort(graphData);
 
   useEffect(() => {
     const graph = new MultiDirectedGraph();
-
-    // // Init graph type and pass json doc for graph's data
-    // createGraph1(graph, nodeDataWithConv2);
-
-    // // Init a sigma instance
-    // const renderer = new Sigma(graph, containerRef.current, {
-    //   defaultEdgeType: "curve", // Enable curved edges
-    //   edgeProgramClasses: { curve: EdgeCurvedArrowProgram },
-    // });
-
-    // // Apply ForceAtlas2 layout to spread nodes out
-    // forceAtlas2.assign(graph, {
-    //   iterations: 200,
-    //   settings: { gravity: 1, scalingRatio: 5 },
-    // });
-
-    //-----------------with top sort layout-----------------//
 
     // Init graph type and pass json doc for graph's data
     createGraph2(graph, graphData, topSortLayout);
