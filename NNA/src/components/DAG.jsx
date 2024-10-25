@@ -58,7 +58,7 @@ const createGraph2 = (graph, data, sortingAlgo) => {
       label: `Node ${index}`,
       size: 15 + node.params.weights.flat().length,
       x: layer * 100, // Spread horizontally by layer
-      y: index * 50, // vertical spacings
+      y: index * 50, // vertical spacings in layer
       color: node.type === "fully connected" ? "#4065fa" : "#FA4F40",
     });
   });

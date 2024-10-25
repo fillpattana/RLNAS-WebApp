@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MultiDirectedGraph } from "graphology";
 import Sigma from "sigma";
 import { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
@@ -10,7 +10,9 @@ import sugiyamaLayout from "./dagComps/sugiyamaLayout";
 const sigmaStyle = { height: "50vh", width: "100vh" };
 
 // Function for graph init with Sugiyama layout applied
-const createGraph = (graph, data, sugiyamaLayoutResult) => {
+const createGraphSugiyama = (graph, data) => {
+  console.log("creategraph called\n");
+  const sugiyamaLayoutResult = sugiyamaLayout(data);
   const { layerAssignments, nodePositions } = sugiyamaLayoutResult;
 
   // Add nodes by layers and positions
@@ -27,8 +29,8 @@ const createGraph = (graph, data, sugiyamaLayoutResult) => {
     graph.addNode(index.toString(), {
       label: `Node ${index}`,
       size: 15 + node.params.weights.flat().length,
-      x: layer * 100, // Spread horizontally by layer
-      y: position * 50, // Spread vertically by the node's position within the layer
+      x: layer * 100, //horizontal position + distance between nodes of different layers
+      y: position * 50, //vertical position + distance between nodes in same layer
       color: node.type === "fully connected" ? "#4065fa" : "#FA4F40",
     });
   });
@@ -61,29 +63,29 @@ const createGraph = (graph, data, sugiyamaLayoutResult) => {
 };
 
 function DAG({ onNodeClick }) {
-  const containerRef = useRef(null); // stores the HTML where the sigma graph will be drawn
-  const sigmaInstanceRef = useRef(null); // stores the graph itself (change graph UI here)
-  const [graphData, setGraphData] = useState(nodeDataSamp1); // preparation for real-time updates
-  const [sugiyamaApplied, setSugiyamaApplied] = useState(false); // Track if Sugiyama has been applied
+  const containerRef = useRef(null);
+  const sigmaInstanceRef = useRef(null);
+  const [graphData, setGraphData] = useState(nodeDataWithConv3);
+  const hasMountedRef = useRef(false); // Track if component has mounted before
 
   useEffect(() => {
     const graph = new MultiDirectedGraph();
 
-    // Run Sugiyama layout on the graph data
-    const sugiyamaLayoutResult = sugiyamaLayout(graphData);
-
-    // Init graph with Sugiyama layout results
-    createGraph(graph, graphData, sugiyamaLayoutResult);
+    // Only call createGraphSugiyama on the first mount or after an unmount
+    if (!hasMountedRef.current) {
+      createGraphSugiyama(graph, graphData);
+      hasMountedRef.current = true;
+    }
 
     // Init a sigma instance
     const renderer = new Sigma(graph, containerRef.current, {
-      defaultEdgeType: "curve", // Enable curved edges
+      defaultEdgeType: "curve",
       edgeProgramClasses: { curve: EdgeCurvedArrowProgram },
       hideLabelsOnMove: false,
       labelDensity: 10,
     });
 
-    // Add event listener for clicking on nodes
+    //passing node properties as props to parent div for property display
     renderer.on(
       "clickNode",
       (event) => {
@@ -100,18 +102,16 @@ function DAG({ onNodeClick }) {
       { passive: true }
     );
 
-    // Enable drag-and-drop without node creation
+    //drag and drop
     let draggedNode = null;
     let isDragging = false;
 
-    // On mouse down on a node: Start dragging
     renderer.on("downNode", (e) => {
       isDragging = true;
       draggedNode = e.node;
       graph.setNodeAttribute(draggedNode, "highlighted", true);
     });
 
-    // On mouse move, change node position if dragging
     renderer.getMouseCaptor().on("mousemovebody", (e) => {
       if (!isDragging || !draggedNode) return;
 
@@ -120,13 +120,11 @@ function DAG({ onNodeClick }) {
       graph.setNodeAttribute(draggedNode, "x", pos.x);
       graph.setNodeAttribute(draggedNode, "y", pos.y);
 
-      // Prevent default behaviors
       e.preventSigmaDefault();
       e.original.preventDefault();
       e.original.stopPropagation();
     });
 
-    // On mouse up: Stop dragging and fix node position
     renderer.getMouseCaptor().on("mouseup", () => {
       if (draggedNode) {
         graph.removeNodeAttribute(draggedNode, "highlighted");
@@ -135,20 +133,20 @@ function DAG({ onNodeClick }) {
       draggedNode = null;
     });
 
-    // Disable automatic repositioning after drag
     renderer.getMouseCaptor().on("mousedown", () => {
       if (!renderer.getCustomBBox()) renderer.setCustomBBox(renderer.getBBox());
     });
 
     sigmaInstanceRef.current = renderer;
 
-    // Clean up when the component unmounts
     return () => {
+      console.log("Component Unmounts");
       renderer.kill();
+      hasMountedRef.current = false;
     };
   }, [onNodeClick]);
 
-  return <div ref={containerRef} style={sigmaStyle}></div>; // returning div for SigmaJs=direct physical manipulation of the graph's canvas
+  return <div ref={containerRef} style={sigmaStyle}></div>;
 }
 
 export default DAG;

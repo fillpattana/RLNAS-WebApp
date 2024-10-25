@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import nodeData from "./assets/nodeDataWithConv3.json";
 import trainingData from "./assets/trainingData.json";
 import Chart from "./components/Chart";
@@ -9,10 +9,11 @@ import "./styles.css";
 
 function NetworkView() {
   const numberOfLayers = nodeData.Graph.nodes.length;
-  const [selectedNode, setSelectedNode] = useState(null);
-  const handleNodeClick = (nodeData) => {
-    setSelectedNode(nodeData);
-  };
+  const selectedNodeRef = useRef(null);
+
+  const handleNodeClick = useCallback((nodeData) => {
+    selectedNodeRef.current = nodeData;
+  }, []);
 
   return (
     <>
@@ -36,7 +37,7 @@ function NetworkView() {
           </div>
         </div>
         <h3> Properties </h3>
-        <Properties node={selectedNode} />
+        <Properties node={selectedNodeRef} />
       </div>
     </>
   );
