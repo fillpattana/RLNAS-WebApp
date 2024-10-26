@@ -65,7 +65,7 @@ const createGraphSugiyama = (graph, data) => {
 function DAG({ onNodeClick }) {
   const containerRef = useRef(null);
   const sigmaInstanceRef = useRef(null);
-  const [graphData, setGraphData] = useState(nodeDataWithConv3);
+  const [graphData, setGraphData] = useState(nodeDataSamp1);
   const hasMountedRef = useRef(false); // Track if component has mounted before
 
   useEffect(() => {
