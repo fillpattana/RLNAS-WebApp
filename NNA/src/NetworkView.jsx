@@ -9,10 +9,12 @@ import "./styles.css";
 
 function NetworkView() {
   const numberOfLayers = nodeData.Graph.nodes.length;
+  const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
 
   const handleNodeClick = useCallback((nodeData) => {
     selectedNodeRef.current = nodeData;
+    setSelectedNode(nodeData); // Trigger update for Properties display
   }, []);
 
   return (
@@ -37,7 +39,7 @@ function NetworkView() {
           </div>
         </div>
         <h3> Properties </h3>
-        <Properties node={selectedNodeRef} />
+        <Properties node={selectedNode} />
       </div>
     </>
   );
