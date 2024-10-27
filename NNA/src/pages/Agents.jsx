@@ -1,6 +1,4 @@
 import { useCallback, useState, useRef } from "react";
-import nodeData from "../assets/nodeDataWithConv3.json";
-import trainingData from "../assets/trainingData.json";
 import Chart from "../components/Chart";
 import DAGTopo from "../components/DAGTopo";
 import DAGSugi from "../components/DAGSugi";
@@ -8,13 +6,12 @@ import Properties from "../components/Properties";
 import "../styles/Agents.css";
 
 function Agents() {
-  const numberOfLayers = nodeData.Graph.nodes.length;
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
 
   const handleNodeClick = useCallback((nodeData) => {
     selectedNodeRef.current = nodeData;
-    setSelectedNode(nodeData); // Trigger update for Properties display
+    setSelectedNode(nodeData);
   }, []);
 
   return (

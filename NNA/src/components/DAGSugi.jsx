@@ -112,18 +112,22 @@ function DAGSugi({ onNodeClick }) {
       graph.setNodeAttribute(draggedNode, "highlighted", true);
     });
 
-    renderer.getMouseCaptor().on("mousemovebody", (e) => {
-      if (!isDragging || !draggedNode) return;
+    renderer.getMouseCaptor().on(
+      "mousemovebody",
+      (e) => {
+        if (!isDragging || !draggedNode) return;
 
-      const pos = renderer.viewportToGraph(e);
+        const pos = renderer.viewportToGraph(e);
 
-      graph.setNodeAttribute(draggedNode, "x", pos.x);
-      graph.setNodeAttribute(draggedNode, "y", pos.y);
+        graph.setNodeAttribute(draggedNode, "x", pos.x);
+        graph.setNodeAttribute(draggedNode, "y", pos.y);
 
-      e.preventSigmaDefault();
-      e.original.preventDefault();
-      e.original.stopPropagation();
-    });
+        e.preventSigmaDefault();
+        e.original.preventDefault();
+        e.original.stopPropagation();
+      },
+      { passive: true }
+    );
 
     renderer.getMouseCaptor().on("mouseup", () => {
       if (draggedNode) {
