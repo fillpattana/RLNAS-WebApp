@@ -1,4 +1,3 @@
-import "./styles.css";
 import NetworkView from "./NetworkView";
 
 function App() {

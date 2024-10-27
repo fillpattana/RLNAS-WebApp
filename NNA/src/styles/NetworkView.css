@@ -5,7 +5,7 @@
 }
 
 .dag-container {
-  border: 3px solid black; /* Adds a black border */
+  border: 3px solid black;
   align-self: center;
   padding: 2px; /* Adds padding */
   margin: 2px 0; /* Adds margin */

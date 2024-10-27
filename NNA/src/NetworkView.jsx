@@ -2,10 +2,10 @@ import { useCallback, useState, useRef } from "react";
 import nodeData from "./assets/nodeDataWithConv3.json";
 import trainingData from "./assets/trainingData.json";
 import Chart from "./components/Chart";
-import DAG from "./components/DAG";
-import DAG2 from "./components/DAG2";
+import DAG from "./components/DAGTopo";
+import DAG2 from "./components/DAGSugi";
 import Properties from "./components/Properties";
-import "./styles.css";
+import "./styles/NetworkView.css";
 
 function NetworkView() {
   const numberOfLayers = nodeData.Graph.nodes.length;
