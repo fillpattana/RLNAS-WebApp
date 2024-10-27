@@ -1,11 +1,20 @@
-import "./styles.css";
-import NetworkView from "./NetworkView";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Route, Routes } from "react-router-dom";
+import Agents from "./pages/Agents";
+import Home from "./pages/Home";
+import Overview from "./pages/Overview";
+import NavBar from "./pages/NavBar";
 
 function App() {
   return (
     <>
+      <NavBar />
       <div>
-        <NetworkView />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Overview" element={<Overview />} />
+          <Route path="/Agents" element={<Agents />} />
+        </Routes>
       </div>
     </>
   );

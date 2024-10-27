@@ -1,0 +1,4 @@
+.active-page {
+  text-decoration: underline;
+  font-weight: bold; /* Optional, to emphasize the active link */
+}

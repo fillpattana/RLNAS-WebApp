@@ -62,7 +62,7 @@ const createGraphSugiyama = (graph, data) => {
   }
 };
 
-function DAG({ onNodeClick }) {
+function DAGSugi({ onNodeClick }) {
   const containerRef = useRef(null);
   const sigmaInstanceRef = useRef(null);
   const [graphData, setGraphData] = useState(nodeDataSamp1);
@@ -112,18 +112,22 @@ function DAG({ onNodeClick }) {
       graph.setNodeAttribute(draggedNode, "highlighted", true);
     });
 
-    renderer.getMouseCaptor().on("mousemovebody", (e) => {
-      if (!isDragging || !draggedNode) return;
+    renderer.getMouseCaptor().on(
+      "mousemovebody",
+      (e) => {
+        if (!isDragging || !draggedNode) return;
 
-      const pos = renderer.viewportToGraph(e);
+        const pos = renderer.viewportToGraph(e);
 
-      graph.setNodeAttribute(draggedNode, "x", pos.x);
-      graph.setNodeAttribute(draggedNode, "y", pos.y);
+        graph.setNodeAttribute(draggedNode, "x", pos.x);
+        graph.setNodeAttribute(draggedNode, "y", pos.y);
 
-      e.preventSigmaDefault();
-      e.original.preventDefault();
-      e.original.stopPropagation();
-    });
+        e.preventSigmaDefault();
+        e.original.preventDefault();
+        e.original.stopPropagation();
+      },
+      { passive: true }
+    );
 
     renderer.getMouseCaptor().on("mouseup", () => {
       if (draggedNode) {
@@ -149,4 +153,4 @@ function DAG({ onNodeClick }) {
   return <div ref={containerRef} style={sigmaStyle}></div>;
 }
 
-export default DAG;
+export default DAGSugi;

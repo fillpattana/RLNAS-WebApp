@@ -84,7 +84,7 @@ const createGraph2 = (graph, data, sortingAlgo) => {
   });
 };
 
-function DAG({ onNodeClick }) {
+function DAGTopo({ onNodeClick }) {
   const containerRef = useRef(null); //stores the HTML where the sigma graph will be drawn
   const sigmaInstanceRef = useRef(null); //stores the graph itself (change graph UI here)
   const [graphData, setGraphData] = useState(nodeDataWithConv3); //preparation for realtime updates
@@ -131,4 +131,4 @@ function DAG({ onNodeClick }) {
   return <div ref={containerRef} style={sigmaStyle}></div>; //returning div for SigmaJs=direct physical manipulation of the graph's canvas
 }
 
-export default DAG;
+export default DAGTopo;
