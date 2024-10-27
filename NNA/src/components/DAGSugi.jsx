@@ -62,7 +62,7 @@ const createGraphSugiyama = (graph, data) => {
   }
 };
 
-function DAG({ onNodeClick }) {
+function DAGSugi({ onNodeClick }) {
   const containerRef = useRef(null);
   const sigmaInstanceRef = useRef(null);
   const [graphData, setGraphData] = useState(nodeDataSamp1);
@@ -149,4 +149,4 @@ function DAG({ onNodeClick }) {
   return <div ref={containerRef} style={sigmaStyle}></div>;
 }
 
-export default DAG;
+export default DAGSugi;

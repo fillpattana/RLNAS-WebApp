@@ -2,8 +2,8 @@ import { useCallback, useState, useRef } from "react";
 import nodeData from "./assets/nodeDataWithConv3.json";
 import trainingData from "./assets/trainingData.json";
 import Chart from "./components/Chart";
-import DAG from "./components/DAGTopo";
-import DAG2 from "./components/DAGSugi";
+import DAGTopo from "./components/DAGTopo";
+import DAGSugi from "./components/DAGSugi";
 import Properties from "./components/Properties";
 import "./styles/NetworkView.css";
 
@@ -35,7 +35,7 @@ function NetworkView() {
         <h3> DAG </h3>
         <div className="centered-container">
           <div className="dag-container">
-            <DAG2 onNodeClick={handleNodeClick} />
+            <DAGSugi onNodeClick={handleNodeClick} />
           </div>
         </div>
         <h3> Properties </h3>
