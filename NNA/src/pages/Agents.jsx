@@ -1,13 +1,13 @@
 import { useCallback, useState, useRef } from "react";
-import nodeData from "./assets/nodeDataWithConv3.json";
-import trainingData from "./assets/trainingData.json";
-import Chart from "./components/Chart";
-import DAGTopo from "./components/DAGTopo";
-import DAGSugi from "./components/DAGSugi";
-import Properties from "./components/Properties";
-import "./styles/NetworkView.css";
+import nodeData from "../assets/nodeDataWithConv3.json";
+import trainingData from "../assets/trainingData.json";
+import Chart from "../components/Chart";
+import DAGTopo from "../components/DAGTopo";
+import DAGSugi from "../components/DAGSugi";
+import Properties from "../components/Properties";
+import "../styles/Agents.css";
 
-function NetworkView() {
+function Agents() {
   const numberOfLayers = nodeData.Graph.nodes.length;
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
@@ -19,15 +19,6 @@ function NetworkView() {
 
   return (
     <>
-      <div>
-        <h1>Sampled Data</h1>
-        <h3>Graph Data</h3>
-        <p>{JSON.stringify(nodeData)}</p>
-        <p> Number of Layers: {numberOfLayers}</p>
-
-        <h3>Training Data</h3>
-        <p>{JSON.stringify(trainingData)}</p>
-      </div>
       <div>
         <h1> Elements </h1>
         <h3> Chart </h3>
@@ -45,4 +36,4 @@ function NetworkView() {
   );
 }
 
-export default NetworkView;
+export default Agents;
