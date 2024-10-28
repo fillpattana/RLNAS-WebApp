@@ -1,8 +1,9 @@
 function Properties({ node }) {
   if (!node) return <div>Select a node to see details</div>;
+
   return (
     <div>
-      <h3>Node Details</h3>
+      <h5>Node Details</h5>
       <p>
         <strong>Node Number:</strong> {node.id}
       </p>
@@ -13,7 +14,10 @@ function Properties({ node }) {
         <strong>Activation Function:</strong> {node.activation}
       </p>
       <p>
-        <strong>Weights:</strong> {JSON.stringify(node.weights)}
+        <strong>Weights:</strong>{" "}
+        <span style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>
+          {JSON.stringify(node.weights)}
+        </span>
       </p>
       <p>
         <strong>Biases:</strong> {JSON.stringify(node.biases)}

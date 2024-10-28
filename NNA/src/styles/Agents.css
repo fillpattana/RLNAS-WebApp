@@ -1,4 +1,4 @@
-/* .centered-container {
+.centered-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,4 +11,4 @@
   margin: 2px 0;
   width: fit-content;
   display: inline-block;
-} */
+}
