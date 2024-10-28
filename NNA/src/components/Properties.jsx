@@ -2,7 +2,7 @@ function Properties({ node }) {
   if (!node) return <div>Select a node to see details</div>;
   return (
     <div>
-      <h3>Node Details</h3>
+      <h5>Node Details</h5>
       <p>
         <strong>Node Number:</strong> {node.id}
       </p>
