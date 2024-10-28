@@ -32,8 +32,7 @@ function DAGNavBar({ node }) {
             id="diagram-properties"
           >
             <NavDropdown.Header as="div">
-              {" "}
-              <Properties node={node} />{" "}
+              <Properties node={node} />
             </NavDropdown.Header>
           </NavDropdown>
         </Navbar.Collapse>
