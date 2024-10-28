@@ -3,7 +3,6 @@ import { MultiDirectedGraph } from "graphology";
 import Sigma from "sigma";
 import { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
 import { EdgeArrowProgram } from "sigma/rendering";
-import nodeDataWithConv3 from "../assets/nodeDataWithConv3.json";
 import nodeDataSamp1 from "../assets/nodeDataSamp1.json";
 import sugiyamaLayout from "./dagComps/sugiyamaLayout";
 

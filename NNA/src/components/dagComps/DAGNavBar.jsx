@@ -11,18 +11,20 @@ function DAGNavBar({ node }) {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScrollable">
           <Nav
+            defaultActiveKey="#Agent1"
+            variant="tabs"
             className="me-auto my-2 my-lg-0"
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Nav.Link href="#Agent1">Agent1</Nav.Link>
-            <Nav.Link href="#Agent2">Agent2</Nav.Link>
-            <Nav.Link href="#Agent3">Agent3</Nav.Link>
-            <Nav.Link href="#Agent4">Agent4</Nav.Link>
-            <Nav.Link href="#Agent5">Agent5</Nav.Link>
-            <Nav.Link href="#Agent6">Agent6</Nav.Link>
-            <Nav.Link href="#Agent7">Agent7</Nav.Link>
-            <Nav.Link href="#Agent8">Agent8</Nav.Link>
+            <Nav.Link href="#Episode 1">Episode 1</Nav.Link>
+            <Nav.Link href="#Episode 2">Episode 2</Nav.Link>
+            <Nav.Link href="#Episode 3">Episode 3</Nav.Link>
+            <Nav.Link href="#Episode 4">Episode 4</Nav.Link>
+            <Nav.Link href="#Episode 5">Episode 5</Nav.Link>
+            <Nav.Link href="#Episode 6">Episode 6</Nav.Link>
+            <Nav.Link href="#Episode 7">Episode 7</Nav.Link>
+            <Nav.Link href="#Episode 8">Episode 8</Nav.Link>
           </Nav>
           <NavDropdown
             title="Properties"

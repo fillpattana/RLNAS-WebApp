@@ -6,6 +6,7 @@ import Properties from "../components/Properties";
 import DropDownProps from "../components/dagComps/DropDownProps";
 import DAGNavBar from "../components/dagComps/DAGNavBar";
 import "../styles/Agents.css";
+import Agents2 from "./Agents2";
 
 function Agents() {
   const [selectedNode, setSelectedNode] = useState(null);
@@ -24,14 +25,15 @@ function Agents() {
         <div className="centered-container">
           <div className="dag-container">
             <DAGNavBar node={selectedNode} />
-            {/* <DropDownProps node={selectedNode} /> */}
             <DAGSugi onNodeClick={handleNodeClick} />
           </div>
         </div>
-        <h3> Properties </h3>
-        <Properties node={selectedNode} />
+        {/* <h3> Properties </h3>
+        <Properties node={selectedNode} /> */}
         <h3> Chart </h3>
         <Chart />
+        <h3> Structure </h3>
+        <Agents2 />
       </div>
     </>
   );
