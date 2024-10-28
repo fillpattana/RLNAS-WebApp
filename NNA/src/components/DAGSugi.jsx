@@ -81,6 +81,7 @@ function DAGSugi({ onNodeClick }) {
       defaultEdgeType: "curve",
       edgeProgramClasses: { curve: EdgeCurvedArrowProgram },
       hideLabelsOnMove: false,
+      allowInvalidContainer: true,
       labelDensity: 10,
     });
 

@@ -6,6 +6,7 @@ import Chart from "../components/Chart";
 import DAGSugi from "../components/DAGSugi";
 import DAGNavBar from "../components/dagComps/DAGNavBar";
 import "../styles/Agents.css";
+import CarouselDag from "../components/CarouselDag";
 
 function Agents() {
   const [selectedNode, setSelectedNode] = useState(null);
@@ -42,6 +43,14 @@ function Agents() {
           <h3> Simple Line Chart - Loss/Epoch Chart </h3>
           <div className="centered-container">
             <Chart />
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <h3> Carousel Tryout </h3>
+          <div className="centered-container">
+            <CarouselDag />
           </div>
         </Col>
       </Row>
