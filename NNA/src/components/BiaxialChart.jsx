@@ -12,7 +12,7 @@ import trainingData from "../assets/trainingData.json";
 
 // BiaxialLineChart accepts [{"iterationNumber":0,"accuracy":0.1,"trainingTime":100},{"iterationNumber":n,"accuracy":n,"trainingTime":n}]
 
-function Chart() {
+function BiaxialLineChart() {
   const [chartSize, setChartSize] = useState({
     width: window.innerWidth * 0.5,
     height: window.innerHeight * 0.5,
@@ -73,4 +73,4 @@ function Chart() {
   );
 }
 
-export default Chart;
+export default BiaxialLineChart;
