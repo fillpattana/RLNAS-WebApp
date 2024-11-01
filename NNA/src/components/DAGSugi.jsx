@@ -6,7 +6,7 @@ import { EdgeArrowProgram } from "sigma/rendering";
 import nodeDataSamp1 from "../assets/nodeDataSamp1.json";
 import sugiyamaLayout from "./dagComps/sugiyamaLayout";
 
-const sigmaStyle = { height: "50vh", width: "100vh" };
+const sigmaStyle = { height: "500px", width: "1000px" };
 
 // Function for graph init with Sugiyama layout applied
 const createGraphSugiyama = (graph, data) => {

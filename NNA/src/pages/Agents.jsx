@@ -20,7 +20,6 @@ function Agents() {
   return (
     <>
       <div>
-        <h1> Elements </h1>
         {/* <h3> DAG </h3>
         <div className="centered-container">
           <div className="dag-container">
@@ -30,7 +29,6 @@ function Agents() {
         </div>
         <h3> BiaxialChart </h3>
         <BiaxialChart /> */}
-        <h3> Structure </h3>
         <Agents2 />
       </div>
     </>

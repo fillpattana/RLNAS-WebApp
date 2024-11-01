@@ -12,7 +12,7 @@ import nodeDataWithConv3 from "../assets/nodeDataWithConv3.json"; //modified sam
 import topSort from "./dagComps/topologicalSort";
 
 //Sigma canvas = size of canvas for graph to be drawn
-const sigmaStyle = { height: "500px", width: "500px" };
+const sigmaStyle = { height: "500px", width: "1000px" };
 
 // Function for graph init using lib layouts
 // const createGraph1 = (graph, data) => {
@@ -101,6 +101,7 @@ function DAGTopo({ onNodeClick }) {
     const renderer = new Sigma(graph, containerRef.current, {
       defaultEdgeType: "curve", // Enable curved edges
       edgeProgramClasses: { curve: EdgeArrowProgram },
+      allowInvalidContainer: true,
     });
 
     // Add event listener for clicking on nodes

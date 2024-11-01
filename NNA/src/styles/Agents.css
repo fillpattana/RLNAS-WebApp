@@ -12,3 +12,14 @@
   width: fit-content;
   display: inline-block;
 }
+
+/* In Agents.css or relevant stylesheet */
+.carousel-control-prev,
+.carousel-control-next {
+  pointer-events: none; /* Disable pointer events on the whole area */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  pointer-events: auto; /* Enable pointer events only on the icon */
+}

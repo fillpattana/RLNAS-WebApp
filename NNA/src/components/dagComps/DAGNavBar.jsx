@@ -6,7 +6,12 @@ import Properties from "../Properties";
 
 function DAGNavBar({ node }) {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar
+      bg="light"
+      data-bs-theme="light"
+      expand="lg"
+      className="bg-body-tertiary"
+    >
       <Container fluid>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScrollable">

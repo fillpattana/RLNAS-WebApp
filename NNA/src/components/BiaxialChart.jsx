@@ -52,8 +52,8 @@ function BiaxialLineChart() {
     >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="iterationNumber" />
-      <YAxis yAxisId="left" />
-      <YAxis yAxisId="right" orientation="right" />
+      <YAxis yAxisId="left" tick={{ fill: "#8884d8" }} />
+      <YAxis yAxisId="right" orientation="right" tick={{ fill: "#82ca9d" }} />
       <Tooltip />
       <Legend />
       <Line

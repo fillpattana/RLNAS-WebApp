@@ -1,16 +1,25 @@
+import { useCallback, useState, useRef } from "react";
+// Bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useCallback, useState, useRef } from "react";
-import Chart from "../components/Chart";
+import Carousel from "react-bootstrap/Carousel";
+// Components
+import BiaxialChart from "../components/BiaxialChart";
 import DAGSugi from "../components/DAGSugi";
 import DAGNavBar from "../components/dagComps/DAGNavBar";
+import SingleLineChart from "../components/SingleLineChart";
+// Styles
 import "../styles/Agents.css";
-import CarouselDag from "../components/CarouselDag";
 
 function Agents() {
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
+  const [index, setIndex] = useState(0);
+
+  const handleNextIteration = (selectedIndex) => {
+    setIndex(selectedIndex);
+  };
 
   const handleNodeClick = useCallback((nodeData) => {
     selectedNodeRef.current = nodeData;
@@ -22,11 +31,41 @@ function Agents() {
       <Row>
         <Col>
           <h3> Network Architecture - Direct Acyclic Graph </h3>
-          <div className="centered-container">
+          {/* <div className="centered-container">
             <div className="dag-container">
               <DAGNavBar node={selectedNode} />
               <DAGSugi onNodeClick={handleNodeClick} />
             </div>
+          </div> */}
+          <div className="centered-container">
+            <Carousel
+              fade
+              interval={null}
+              activeIndex={index}
+              onSelect={handleNextIteration}
+              data-bs-theme="dark"
+            >
+              <Carousel.Item>
+                <div className="dag-container">
+                  <DAGNavBar node={selectedNode} />
+                  <DAGSugi onNodeClick={handleNodeClick} />
+                </div>
+                <Carousel.Caption>
+                  <h5>Agent Group 1</h5>
+                  <p>Episode 1 - Iteration 1</p>
+                </Carousel.Caption>
+              </Carousel.Item>
+              <Carousel.Item>
+                <div className="dag-container">
+                  <DAGNavBar node={selectedNode} />
+                  <DAGSugi onNodeClick={handleNodeClick} />
+                </div>
+                <Carousel.Caption>
+                  <h5>Agent Group 1</h5>
+                  <p>Episode 1 - Iteration 2</p>
+                </Carousel.Caption>
+              </Carousel.Item>
+            </Carousel>
           </div>
         </Col>
       </Row>
@@ -34,23 +73,15 @@ function Agents() {
         <Col>
           <h3> Biaxial Chart - Training Time and Accuracy </h3>
           <div className="centered-container">
-            <Chart />
+            <BiaxialChart />
           </div>
         </Col>
       </Row>
       <Row>
         <Col>
-          <h3> Simple Line Chart - Loss/Epoch Chart </h3>
+          <h3> Single Line Chart - Loss/Epoch Chart </h3>
           <div className="centered-container">
-            <Chart />
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <h3> Carousel Tryout </h3>
-          <div className="centered-container">
-            <CarouselDag />
+            <SingleLineChart />
           </div>
         </Col>
       </Row>
