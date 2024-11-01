@@ -13,6 +13,7 @@ function DAGNavBar({ node }) {
       className="bg-body-tertiary"
     >
       <Container fluid>
+        <Navbar.Brand href="#Episodes">Episodes</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScrollable">
           <Nav
@@ -22,14 +23,14 @@ function DAGNavBar({ node }) {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Nav.Link href="#Episode 1">Episode 1</Nav.Link>
-            <Nav.Link href="#Episode 2">Episode 2</Nav.Link>
-            <Nav.Link href="#Episode 3">Episode 3</Nav.Link>
-            <Nav.Link href="#Episode 4">Episode 4</Nav.Link>
-            <Nav.Link href="#Episode 5">Episode 5</Nav.Link>
-            <Nav.Link href="#Episode 6">Episode 6</Nav.Link>
-            <Nav.Link href="#Episode 7">Episode 7</Nav.Link>
-            <Nav.Link href="#Episode 8">Episode 8</Nav.Link>
+            <Nav.Link href="#Episode1">1</Nav.Link>
+            <Nav.Link href="#Episode2">2</Nav.Link>
+            <Nav.Link href="#Episode3">3</Nav.Link>
+            <Nav.Link href="#Episode4">4</Nav.Link>
+            <Nav.Link href="#Episode5">5</Nav.Link>
+            <Nav.Link href="#Episode6">6</Nav.Link>
+            <Nav.Link href="#Episode7">7</Nav.Link>
+            <Nav.Link href="#Episode8">8</Nav.Link>
           </Nav>
           <NavDropdown
             title="Properties"
