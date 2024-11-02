@@ -1,0 +1,9 @@
+.list-group-item {
+  cursor: pointer;
+}
+
+.list-group-item-custom {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}

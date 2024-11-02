@@ -141,6 +141,13 @@ function DAGSugi({ onNodeClick }) {
       if (!renderer.getCustomBBox()) renderer.setCustomBBox(renderer.getBBox());
     });
 
+    renderer.on("enterNode", () => {
+      containerRef.current.style.cursor = "pointer";
+    });
+    renderer.on("leaveNode", () => {
+      containerRef.current.style.cursor = "default";
+    });
+
     sigmaInstanceRef.current = renderer;
 
     return () => {

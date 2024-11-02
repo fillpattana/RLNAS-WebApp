@@ -9,6 +9,7 @@ import BiaxialChart from "../components/BiaxialChart";
 import DAGSugi from "../components/DAGSugi";
 import DAGNavBar from "../components/dagComps/DAGNavBar";
 import SingleLineChart from "../components/SingleLineChart";
+import AgentGroups from "../components/AgentGroups";
 // Styles
 import "../styles/Agents.css";
 
@@ -29,8 +30,11 @@ function Agents() {
   return (
     <Container>
       <Row>
+        <h3> Network Architecture - Direct Acyclic Graph </h3>
         <Col>
-          <h3> Network Architecture - Direct Acyclic Graph </h3>
+          <AgentGroups />
+        </Col>
+        <Col>
           {/* <div className="centered-container">
             <div className="dag-container">
               <DAGNavBar node={selectedNode} />
