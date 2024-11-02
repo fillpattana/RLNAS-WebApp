@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -48,6 +48,24 @@ const data = [
 ];
 
 function SingleLineChart() {
+  const [chartSize, setChartSize] = useState({
+    width: window.innerWidth * 0.5,
+    height: window.innerHeight * 0.5,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setChartSize({
+        width: window.innerWidth * 0.5,
+        height: window.innerHeight * 0.5,
+      });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  console.log("Chart Re-rendered");
+
   return (
     <LineChart
       width={500}
