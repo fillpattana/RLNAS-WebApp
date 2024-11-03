@@ -51,11 +51,27 @@ function BiaxialLineChart() {
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="iterationNumber" />
-      <YAxis yAxisId="left" tick={{ fill: "#8884d8" }} />
-      <YAxis yAxisId="right" orientation="right" tick={{ fill: "#82ca9d" }} />
+      <XAxis
+        dataKey="iterationNumber"
+        label={{
+          value: "Iteration",
+          position: "insideBottom",
+          offset: -10,
+        }}
+      />
+      <YAxis
+        yAxisId="left"
+        tick={{ fill: "#8884d8" }}
+        label={{ value: "Accuracy", angle: -90, position: "insideLeft" }}
+      />
+      <YAxis
+        yAxisId="right"
+        orientation="right"
+        tick={{ fill: "#82ca9d" }}
+        label={{ value: "Training Time", angle: 90, position: "insideRight" }}
+      />
       <Tooltip />
-      <Legend />
+      {/* <Legend /> */}
       <Line
         yAxisId="left"
         type="monotone"
