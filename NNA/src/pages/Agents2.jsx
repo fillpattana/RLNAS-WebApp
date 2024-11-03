@@ -57,7 +57,7 @@ function Agents() {
 
   return (
     <div>
-      <Container className="agents-background">
+      <Container>
         <div className="elements-container">
           <Row>
             <h3 className="topic-name">
@@ -98,22 +98,24 @@ function Agents() {
             </Col>
           </Row>
         </div>
-        <Row>
-          <Col>
-            <h3 className="topic-name">
-              Biaxial Chart - Training Time and Accuracy
-            </h3>
-            <div className="centered-container">
-              <BiaxialChart />
-            </div>
-          </Col>
-          <Col>
-            <h3 className="topic-name">Properties</h3>
-            <div className="centered-container">
-              <Properties node={selectedNode} />
-            </div>
-          </Col>
-        </Row>
+        <div className="elements-container">
+          <Row>
+            <Col>
+              <h3 className="topic-name">Training Time and Accuracy</h3>
+              <div className="shadow-lg rounded">
+                <div className="centered-container">
+                  <BiaxialChart />
+                </div>
+              </div>
+            </Col>
+            <Col>
+              <h3 className="topic-name">Node Properties</h3>
+              <div className="shadow-lg rounded">
+                <Properties node={selectedNode} />
+              </div>
+            </Col>
+          </Row>
+        </div>
       </Container>
     </div>
   );

@@ -3,7 +3,6 @@ function Properties({ node }) {
 
   return (
     <div>
-      <h5>Node Details</h5>
       <p>
         <strong>Node Number:</strong> {node.id}
       </p>
@@ -14,7 +13,7 @@ function Properties({ node }) {
         <strong>Activation Function:</strong> {node.activation}
       </p>
       <p>
-        <strong>Weights:</strong>{" "}
+        <strong>Weights:</strong>
         <span style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>
           {JSON.stringify(node.weights)}
         </span>

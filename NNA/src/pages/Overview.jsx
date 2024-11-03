@@ -10,11 +10,11 @@ function Overview() {
       <Container>
         <Row>
           <Col>
-            <h3> Overall Epoch/Loss of Agents </h3>
+            <h3> Overall Epoch/Loss of All Agents </h3>
             <SingleLineChart />
           </Col>
           <Col>
-            <h3> Overall Training Time and Accuracy of Agents </h3>
+            <h3> Overall Training Time and Accuracy of All Agents </h3>
             <BiaxialLineChart />
           </Col>
         </Row>

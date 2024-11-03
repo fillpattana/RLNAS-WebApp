@@ -12,31 +12,31 @@ import {
 
 const data = [
   {
-    name: "1",
+    epoch: "1",
     loss: 2400,
   },
   {
-    name: "2",
+    epoch: "2",
     loss: 1398,
   },
   {
-    name: "3",
+    epoch: "3",
     loss: 9800,
   },
   {
-    name: "4",
+    epoch: "4",
     loss: 3908,
   },
   {
-    name: "5",
+    epoch: "5",
     loss: 4800,
   },
   {
-    name: "6",
+    epoch: "6",
     loss: 3800,
   },
   {
-    name: "7",
+    epoch: "7",
     loss: 4300,
   },
 ];
@@ -64,9 +64,9 @@ function SingleLineChart() {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
-          dataKey="name"
+          dataKey="epoch"
           label={{
-            value: "Iteration",
+            value: "Epoch",
             position: "insideBottom",
             offset: -10,
             stroke: "black",
