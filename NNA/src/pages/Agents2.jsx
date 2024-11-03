@@ -67,30 +67,32 @@ function Agents() {
             </Col>
             <Col>
               <div className="centered-container">
-                <Carousel
-                  fade
-                  interval={null}
-                  activeIndex={index}
-                  onSelect={handleNextIteration}
-                  data-bs-theme="dark"
-                >
-                  <Carousel.Item>
-                    <DAGNavBar node={selectedNode} />
-                    <DAGSugi onNodeClick={handleNodeClick} />
-                    <Carousel.Caption>
-                      <h5>Agent Group 1</h5>
-                      <p>Episode 1 - Iteration 1</p>
-                    </Carousel.Caption>
-                  </Carousel.Item>
-                  <Carousel.Item>
-                    <DAGNavBar node={selectedNode} />
-                    <DAGSugi onNodeClick={handleNodeClick} />
-                    <Carousel.Caption>
-                      <h5>Agent Group 1</h5>
-                      <p>Episode 1 - Iteration 2</p>
-                    </Carousel.Caption>
-                  </Carousel.Item>
-                </Carousel>
+                <div className="shadow-lg rounded">
+                  <Carousel
+                    fade
+                    interval={null}
+                    activeIndex={index}
+                    onSelect={handleNextIteration}
+                    data-bs-theme="dark"
+                  >
+                    <Carousel.Item>
+                      <DAGNavBar node={selectedNode} />
+                      <DAGSugi onNodeClick={handleNodeClick} />
+                      <Carousel.Caption>
+                        <h5>Agent 1</h5>
+                        <p>Episode 1 - Iteration 1</p>
+                      </Carousel.Caption>
+                    </Carousel.Item>
+                    <Carousel.Item>
+                      <DAGNavBar node={selectedNode} />
+                      <DAGSugi onNodeClick={handleNodeClick} />
+                      <Carousel.Caption>
+                        <h5>Agent 1</h5>
+                        <p>Episode 1 - Iteration 2</p>
+                      </Carousel.Caption>
+                    </Carousel.Item>
+                  </Carousel>
+                </div>
               </div>
             </Col>
           </Row>

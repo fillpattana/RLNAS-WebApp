@@ -5,19 +5,23 @@
 }
 
 .topic-name {
-  margin-top: 1em;
-  margin-bottom: 0.5em;
+  margin-bottom: 1em;
 }
 
 .elements-container {
   border: 3px solid #f8f9fa;
   background-color: #f8f9fa;
   border-radius: 25px;
-  align-self: center;
-  padding: 2px;
+  padding: 20px;
   margin: 2px 0;
-  width: fit-content;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.dag-container {
+  border: 4px solid #8c8c8c70;
+  border-radius: 25px;
 }
 
 .carousel-control-prev,

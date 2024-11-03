@@ -6,7 +6,12 @@ import "../styles/NavBar.css";
 
 function NavBar() {
   return (
-    <Navbar sticky="top" expand="lg" className="bg-body-tertiary">
+    <Navbar
+      sticky="top"
+      expand="lg"
+      className="bg-body-tertiary"
+      style={{ marginBottom: "1rem" }}
+    >
       <Container>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScrollable">
