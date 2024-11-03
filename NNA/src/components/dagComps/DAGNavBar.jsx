@@ -35,7 +35,7 @@ function DAGNavBar({ node }) {
             <Nav.Link href="#Agent7">Agent 7</Nav.Link>
             <Nav.Link href="#Agent8">Agent 8</Nav.Link>
           </Nav>
-          <NavDropdown
+          {/* <NavDropdown
             title="Node Properties"
             autoClose="inside"
             drop="down"
@@ -45,7 +45,7 @@ function DAGNavBar({ node }) {
             <NavDropdown.Header as="div">
               <Properties node={node} />
             </NavDropdown.Header>
-          </NavDropdown>
+          </NavDropdown> */}
         </Navbar.Collapse>
       </Container>
     </Navbar>

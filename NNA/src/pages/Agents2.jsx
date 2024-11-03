@@ -12,6 +12,7 @@ import SingleLineChart from "../components/SingleLineChart";
 import Episodes from "../components/Episodes";
 // Styles
 import "../styles/Agents.css";
+import Properties from "../components/Properties";
 // Samples
 const episodes = [
   { name: "Episode 1" },
@@ -76,7 +77,7 @@ function Agents() {
                     data-bs-theme="dark"
                   >
                     <Carousel.Item>
-                      <DAGNavBar node={selectedNode} />
+                      <DAGNavBar />
                       <DAGSugi onNodeClick={handleNodeClick} />
                       <Carousel.Caption>
                         <h5>Agent 1</h5>
@@ -84,7 +85,7 @@ function Agents() {
                       </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>
-                      <DAGNavBar node={selectedNode} />
+                      <DAGNavBar />
                       <DAGSugi onNodeClick={handleNodeClick} />
                       <Carousel.Caption>
                         <h5>Agent 1</h5>
@@ -104,6 +105,12 @@ function Agents() {
             </h3>
             <div className="centered-container">
               <BiaxialChart />
+            </div>
+          </Col>
+          <Col>
+            <h3 className="topic-name">Properties</h3>
+            <div className="centered-container">
+              <Properties node={selectedNode} />
             </div>
           </Col>
         </Row>
