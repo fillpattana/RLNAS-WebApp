@@ -11,9 +11,12 @@ function DAGNavBar({ node }) {
       data-bs-theme="light"
       expand="lg"
       className="bg-body-tertiary"
+      style={{
+        borderTopLeftRadius: "25px",
+        borderTopRightRadius: "25px",
+      }}
     >
       <Container fluid>
-        <Navbar.Brand href="#Episodes">Episodes</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScrollable">
           <Nav
@@ -23,14 +26,14 @@ function DAGNavBar({ node }) {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Nav.Link href="#Episode1">1</Nav.Link>
-            <Nav.Link href="#Episode2">2</Nav.Link>
-            <Nav.Link href="#Episode3">3</Nav.Link>
-            <Nav.Link href="#Episode4">4</Nav.Link>
-            <Nav.Link href="#Episode5">5</Nav.Link>
-            <Nav.Link href="#Episode6">6</Nav.Link>
-            <Nav.Link href="#Episode7">7</Nav.Link>
-            <Nav.Link href="#Episode8">8</Nav.Link>
+            <Nav.Link href="#Agent1">Agent 1</Nav.Link>
+            <Nav.Link href="#Agent2">Agent 2</Nav.Link>
+            <Nav.Link href="#Agent3">Agent 3</Nav.Link>
+            <Nav.Link href="#Agent4">Agent 4</Nav.Link>
+            <Nav.Link href="#Agent5">Agent 5</Nav.Link>
+            <Nav.Link href="#Agent6">Agent 6</Nav.Link>
+            <Nav.Link href="#Agent7">Agent 7</Nav.Link>
+            <Nav.Link href="#Agent8">Agent 8</Nav.Link>
           </Nav>
           <NavDropdown
             title="Properties"

@@ -9,9 +9,36 @@ import BiaxialChart from "../components/BiaxialChart";
 import DAGSugi from "../components/DAGSugi";
 import DAGNavBar from "../components/dagComps/DAGNavBar";
 import SingleLineChart from "../components/SingleLineChart";
-import AgentGroups from "../components/AgentGroups";
+import Episodes from "../components/Episodes";
 // Styles
 import "../styles/Agents.css";
+// Samples
+const episodes = [
+  { name: "Episode 1" },
+  { name: "Episode 2" },
+  { name: "Episode 3" },
+  { name: "Episode 4" },
+  { name: "Episode 5" },
+  { name: "Episode 6" },
+  { name: "Episode 7" },
+  { name: "Episode 8" },
+  { name: "Episode 9" },
+  { name: "Episode 10" },
+  { name: "Episode 11" },
+  { name: "Episode 12" },
+  { name: "Episode 13" },
+  { name: "Episode 14" },
+  { name: "Episode 15" },
+  { name: "Episode 16" },
+  { name: "Episode 17" },
+  { name: "Episode 18" },
+  { name: "Episode 19" },
+  { name: "Episode 20" },
+  { name: "Episode 21" },
+  { name: "Episode 22" },
+  { name: "Episode 23" },
+  { name: "Episode 24" },
+];
 
 function Agents() {
   const [selectedNode, setSelectedNode] = useState(null);
@@ -30,52 +57,44 @@ function Agents() {
   return (
     <div>
       <Container className="agents-background">
-        <Row>
-          <h3 className="topic-name">
-            Network Architecture - Direct Acyclic Graph
-          </h3>
-          <Col>
-            <AgentGroups />
-          </Col>
-          <Col>
-            {/* <div className="centered-container">
-            <div className="dag-container">
-              <DAGNavBar node={selectedNode} />
-              <DAGSugi onNodeClick={handleNodeClick} />
-            </div>
-          </div> */}
-            <div className="centered-container">
-              <Carousel
-                fade
-                interval={null}
-                activeIndex={index}
-                onSelect={handleNextIteration}
-                data-bs-theme="dark"
-              >
-                <Carousel.Item>
-                  <div className="dag-container">
+        <div className="dag-container">
+          <Row>
+            <h3 className="topic-name">
+              Network Architecture - Direct Acyclic Graph
+            </h3>
+            <Col>
+              <Episodes episode={episodes} />
+            </Col>
+            <Col>
+              <div className="centered-container">
+                <Carousel
+                  fade
+                  interval={null}
+                  activeIndex={index}
+                  onSelect={handleNextIteration}
+                  data-bs-theme="dark"
+                >
+                  <Carousel.Item>
                     <DAGNavBar node={selectedNode} />
                     <DAGSugi onNodeClick={handleNodeClick} />
-                  </div>
-                  <Carousel.Caption>
-                    <h5>Agent Group 1</h5>
-                    <p>Episode 1 - Iteration 1</p>
-                  </Carousel.Caption>
-                </Carousel.Item>
-                <Carousel.Item>
-                  <div className="dag-container">
+                    <Carousel.Caption>
+                      <h5>Agent Group 1</h5>
+                      <p>Episode 1 - Iteration 1</p>
+                    </Carousel.Caption>
+                  </Carousel.Item>
+                  <Carousel.Item>
                     <DAGNavBar node={selectedNode} />
                     <DAGSugi onNodeClick={handleNodeClick} />
-                  </div>
-                  <Carousel.Caption>
-                    <h5>Agent Group 1</h5>
-                    <p>Episode 1 - Iteration 2</p>
-                  </Carousel.Caption>
-                </Carousel.Item>
-              </Carousel>
-            </div>
-          </Col>
-        </Row>
+                    <Carousel.Caption>
+                      <h5>Agent Group 1</h5>
+                      <p>Episode 1 - Iteration 2</p>
+                    </Carousel.Caption>
+                  </Carousel.Item>
+                </Carousel>
+              </div>
+            </Col>
+          </Row>
+        </div>
         <Row>
           <Col>
             <h3 className="topic-name">

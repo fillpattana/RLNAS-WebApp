@@ -10,7 +10,9 @@
 }
 
 .dag-container {
-  border: 3px solid black;
+  border: 3px solid #f8f9fa;
+  background-color: #f8f9fa;
+  border-radius: 25px;
   align-self: center;
   padding: 2px;
   margin: 2px 0;
@@ -27,9 +29,3 @@
 .carousel-control-next-icon {
   pointer-events: auto;
 }
-
-/* .agents-background {
-  background-color: #f8f9fa;
-  min-height: 100vh;
-  min-width: 100vh;
-} */
