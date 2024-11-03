@@ -9,6 +9,7 @@ function Episodes({ episode }) {
           key={index}
           action
           as="li"
+          style={{ fontSize: 15 }}
           className="list-group-item-custom"
         >
           <div className="ms-2 me-auto">

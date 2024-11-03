@@ -23,7 +23,7 @@ function DAGNavBar({ node }) {
             defaultActiveKey="#Agent1"
             variant="tabs"
             className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: "100px" }}
+            style={{ maxHeight: "100px", fontSize: 18, fontWeight: "bold" }}
             navbarScroll
           >
             <Nav.Link href="#Agent1">Agent 1</Nav.Link>
@@ -36,7 +36,7 @@ function DAGNavBar({ node }) {
             <Nav.Link href="#Agent8">Agent 8</Nav.Link>
           </Nav>
           <NavDropdown
-            title="Properties"
+            title="Node Properties"
             autoClose="inside"
             drop="down"
             align={{ lg: "end" }}
