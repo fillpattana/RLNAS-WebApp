@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   LineChart,
   Line,
@@ -7,90 +7,83 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 
 const data = [
   {
-    name: "Iteration 1",
+    name: "1",
     loss: 2400,
-    amt: 2400,
   },
   {
-    name: "Iteration 2",
+    name: "2",
     loss: 1398,
-    amt: 2210,
   },
   {
-    name: "Iteration 3",
+    name: "3",
     loss: 9800,
-    amt: 2290,
   },
   {
-    name: "Iteration 4",
+    name: "4",
     loss: 3908,
-    amt: 2000,
   },
   {
-    name: "Iteration 5",
+    name: "5",
     loss: 4800,
-    amt: 2181,
   },
   {
-    name: "Iteration 6",
+    name: "6",
     loss: 3800,
-    amt: 2500,
   },
   {
-    name: "Iteration 7",
+    name: "7",
     loss: 4300,
-    amt: 2100,
   },
 ];
 
 function SingleLineChart() {
-  const [chartSize, setChartSize] = useState({
-    width: window.innerWidth * 0.5,
-    height: window.innerHeight * 0.5,
-  });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setChartSize({
-        width: window.innerWidth * 0.5,
-        height: window.innerHeight * 0.5,
-      });
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+  data.iterationNumber?.map((iteration, index) => ({
+    iterationNumber: iteration,
+    accuracy: trainingData.accuracy[index],
+    trainingTime: trainingData.trainingTime[index],
+  })) || [];
   console.log("Chart Re-rendered");
 
   return (
-    <LineChart
-      width={500}
-      height={300}
-      data={data}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 5,
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Line
-        type="monotone"
-        dataKey="loss"
-        stroke="#8884d8"
-        activeDot={{ r: 8 }}
-      />
-      {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
-    </LineChart>
+    <ResponsiveContainer width="100%" height={400}>
+      <LineChart
+        width={500}
+        height={300}
+        data={data}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 20,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis
+          dataKey="name"
+          label={{
+            value: "Iteration",
+            position: "insideBottom",
+            offset: -10,
+            stroke: "black",
+          }}
+        />
+        <YAxis />
+        <Tooltip />
+        <Legend layout="horizontal" verticalAlign="top" align="center" />
+        <Line
+          type="monotone"
+          dataKey="loss"
+          stroke="#8884d8"
+          activeDot={{ r: 8 }}
+        />
+        {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
+      </LineChart>
+    </ResponsiveContainer>
   );
 }
 

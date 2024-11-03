@@ -7,28 +7,13 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 import trainingData from "../assets/trainingData.json";
 
 // BiaxialLineChart accepts [{"iterationNumber":0,"accuracy":0.1,"trainingTime":100},{"iterationNumber":n,"accuracy":n,"trainingTime":n}]
 
 function BiaxialLineChart() {
-  const [chartSize, setChartSize] = useState({
-    width: window.innerWidth * 0.5,
-    height: window.innerHeight * 0.5,
-  });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setChartSize({
-        width: window.innerWidth * 0.5,
-        height: window.innerHeight * 0.5,
-      });
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   // Transform data arrays into an array of objects
   const data =
     trainingData.iterationNumber?.map((iteration, index) => ({
@@ -39,53 +24,64 @@ function BiaxialLineChart() {
   console.log("Chart Re-rendered");
 
   return (
-    <LineChart
-      width={chartSize.width}
-      height={chartSize.height}
-      data={data}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 5,
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis
-        dataKey="iterationNumber"
-        label={{
-          value: "Iteration",
-          position: "insideBottom",
-          offset: -10,
+    <ResponsiveContainer width="100%" height={400}>
+      <LineChart
+        data={data}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 30,
         }}
-      />
-      <YAxis
-        yAxisId="left"
-        tick={{ fill: "#8884d8" }}
-        label={{ value: "Accuracy", angle: -90, position: "insideLeft" }}
-      />
-      <YAxis
-        yAxisId="right"
-        orientation="right"
-        tick={{ fill: "#82ca9d" }}
-        label={{ value: "Training Time", angle: 90, position: "insideRight" }}
-      />
-      <Tooltip />
-      {/* <Legend /> */}
-      <Line
-        yAxisId="left"
-        type="monotone"
-        dataKey="accuracy"
-        stroke="#8884d8"
-        activeDot={{ r: 8 }}
-      />
-      <Line
-        yAxisId="right"
-        type="monotone"
-        dataKey="trainingTime"
-        stroke="#82ca9d"
-      />
-    </LineChart>
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis
+          dataKey="iterationNumber"
+          label={{
+            value: "Iteration",
+            position: "insideBottom",
+            offset: -10,
+            stroke: "black",
+          }}
+        />
+        <YAxis
+          yAxisId="left"
+          tick={{ fill: "#8884d8" }}
+          label={{
+            value: "Accuracy",
+            angle: -90,
+            position: "insideLeft",
+            stroke: "#8884d8",
+          }}
+        />
+        <YAxis
+          yAxisId="right"
+          orientation="right"
+          tick={{ fill: "#82ca9d" }}
+          label={{
+            value: "Training Time",
+            angle: 90,
+            position: "insideRight",
+            stroke: "#82ca9d",
+          }}
+        />
+        <Tooltip />
+        <Legend layout="horizontal" verticalAlign="top" align="center" />
+        <Line
+          yAxisId="left"
+          type="monotone"
+          dataKey="accuracy"
+          stroke="#8884d8"
+          activeDot={{ r: 8 }}
+        />
+        <Line
+          yAxisId="right"
+          type="monotone"
+          dataKey="trainingTime"
+          stroke="#82ca9d"
+        />
+      </LineChart>
+    </ResponsiveContainer>
   );
 }
 
