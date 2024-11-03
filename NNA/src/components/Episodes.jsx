@@ -1,7 +1,7 @@
 import ListGroup from "react-bootstrap/ListGroup";
 import "../styles/Episodes.css";
 
-function Episodes({ episode }) {
+function Episodes({ episode, activeEpisode, onEpisodeClick }) {
   return (
     <ListGroup as="ol" className="list-group-scrollable">
       {episode.map((agent, index) => (
@@ -10,7 +10,10 @@ function Episodes({ episode }) {
           action
           as="li"
           style={{ fontSize: 15, fontWeight: "normal" }}
-          className="list-group-item-custom"
+          className={`list-group-item-custom ${
+            activeEpisode.name === agent.name ? "active" : ""
+          }`}
+          onClick={() => onEpisodeClick(agent)}
         >
           <div className="ms-2 me-auto">
             <div className="fw-bold">{agent.name}</div>

@@ -14,6 +14,18 @@ import Episodes from "../components/Episodes";
 import "../styles/Agents.css";
 import Properties from "../components/Properties";
 // Samples
+
+const agents = [
+  { id: "Agent 1", name: "Agent 1" },
+  { id: "Agent 2", name: "Agent 2" },
+  { id: "Agent 3", name: "Agent 3" },
+  { id: "Agent 4", name: "Agent 4" },
+  { id: "Agent 5", name: "Agent 5" },
+  { id: "Agent 6", name: "Agent 6" },
+  { id: "Agent 7", name: "Agent 7" },
+  { id: "Agent 8", name: "Agent 8" },
+];
+
 const episodes = [
   { name: "Episode 1" },
   { name: "Episode 2" },
@@ -41,14 +53,36 @@ const episodes = [
   { name: "Episode 24" },
 ];
 
+// const iterations = [
+//   { id: 1, name: "Iteration 1" },
+//   { id: 2, name: "Iteration 2" },
+//   { id: 3, name: "Iteration 3" },
+//   { id: 4, name: "Iteration 4" },
+// ];
+
 function Agents() {
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
   const [index, setIndex] = useState(0);
+  const [activeEpisode, setActiveEpisode] = useState(episodes[0]);
+  const [activeAgent, setActiveAgent] = useState(agents[0].id);
+  //   const [activeIteration, setActiveIteration] = useState(iterations[0]);
+
+  const handleAgentChange = (agentId) => {
+    setActiveAgent(agentId);
+  };
+
+  const handleEpisodeClick = (episode) => {
+    setActiveEpisode(episode);
+  };
 
   const handleNextIteration = (selectedIndex) => {
     setIndex(selectedIndex);
   };
+
+  //   const handleIterationClick = (iteration) => {
+  //     setActiveIteration(iteration);
+  //   };
 
   const handleNodeClick = useCallback((nodeData) => {
     selectedNodeRef.current = nodeData;
@@ -64,11 +98,39 @@ function Agents() {
               Network Architecture - Direct Acyclic Graph
             </h3>
             <Col>
-              <Episodes episode={episodes} />
+              <Episodes
+                episode={episodes}
+                activeEpisode={activeEpisode}
+                onEpisodeClick={handleEpisodeClick}
+              />
             </Col>
             <Col>
               <div className="centered-container">
                 <div className="shadow-lg rounded">
+                  {/* <Carousel
+                    fade
+                    interval={null}
+                    activeIndex={activeIteration}
+                    onSelect={handleIterationClick}
+                    data-bs-theme="dark"
+                  >
+                    {iterations.map((iteration) => (
+                      <Carousel.Item key={iteration.id}>
+                        <DAGNavBar
+                          agents={agents}
+                          activeAgent={activeAgent}
+                          onAgentChange={handleAgentChange}
+                        />
+                        <DAGSugi onNodeClick={handleNodeClick} />
+                        <Carousel.Caption>
+                          <h5>{activeAgent}</h5>
+                          <p>
+                            {activeEpisode.name} - {iteration.name}
+                          </p>
+                        </Carousel.Caption>
+                      </Carousel.Item>
+                    ))}
+                  </Carousel> */}
                   <Carousel
                     fade
                     interval={null}
@@ -77,19 +139,27 @@ function Agents() {
                     data-bs-theme="dark"
                   >
                     <Carousel.Item>
-                      <DAGNavBar />
+                      <DAGNavBar
+                        agents={agents}
+                        activeAgent={activeAgent}
+                        onAgentChange={handleAgentChange}
+                      />
                       <DAGSugi onNodeClick={handleNodeClick} />
                       <Carousel.Caption>
-                        <h5>Agent 1</h5>
-                        <p>Episode 1 - Iteration 1</p>
+                        <h5>{activeAgent}</h5>
+                        <p>{activeEpisode.name} - Iteration 1</p>
                       </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>
-                      <DAGNavBar />
+                      <DAGNavBar
+                        agents={agents}
+                        activeAgent={activeAgent}
+                        onAgentChange={handleAgentChange}
+                      />
                       <DAGSugi onNodeClick={handleNodeClick} />
                       <Carousel.Caption>
-                        <h5>Agent 1</h5>
-                        <p>Episode 1 - Iteration 2</p>
+                        <h5>{activeAgent}</h5>
+                        <p>{activeEpisode.name} - Iteration 2</p>
                       </Carousel.Caption>
                     </Carousel.Item>
                   </Carousel>
@@ -101,7 +171,9 @@ function Agents() {
         <div className="elements-container">
           <Row>
             <Col>
-              <h3 className="topic-name">Training Time and Accuracy</h3>
+              <h3 className="topic-name">
+                {activeAgent}'s Training Time and Accuracy
+              </h3>
               <div className="shadow-lg rounded">
                 <div className="centered-container">
                   <BiaxialChart />

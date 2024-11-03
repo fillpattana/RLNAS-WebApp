@@ -8,6 +8,12 @@
   align-items: start;
 }
 
+.list-group-item-custom.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
 .list-group-scrollable {
   max-height: 557px;
   overflow-y: auto;

@@ -1,10 +1,23 @@
+import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Properties from "../Properties";
 
-function DAGNavBar({ node }) {
+// Define the list of agents at the top
+const agents = [
+  "Agent 1",
+  "Agent 2",
+  "Agent 3",
+  "Agent 4",
+  "Agent 5",
+  "Agent 6",
+  "Agent 7",
+  "Agent 8",
+];
+
+function DAGNavBar({ agents, activeAgent, onAgentChange }) {
   return (
     <Navbar
       bg="light"
@@ -20,22 +33,42 @@ function DAGNavBar({ node }) {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScrollable">
           <Nav
-            defaultActiveKey="#Agent1"
             variant="tabs"
             className="me-auto my-2 my-lg-0"
             style={{ maxHeight: "100px", fontSize: 18, fontWeight: "bold" }}
             navbarScroll
           >
-            <Nav.Link href="#Agent1">Agent 1</Nav.Link>
-            <Nav.Link href="#Agent2">Agent 2</Nav.Link>
-            <Nav.Link href="#Agent3">Agent 3</Nav.Link>
-            <Nav.Link href="#Agent4">Agent 4</Nav.Link>
-            <Nav.Link href="#Agent5">Agent 5</Nav.Link>
-            <Nav.Link href="#Agent6">Agent 6</Nav.Link>
-            <Nav.Link href="#Agent7">Agent 7</Nav.Link>
-            <Nav.Link href="#Agent8">Agent 8</Nav.Link>
+            {agents.map((agent) => (
+              <Nav.Link
+                key={agent.id}
+                active={activeAgent === agent.id}
+                onClick={() => onAgentChange(agent.id)}
+              >
+                {agent.name}
+              </Nav.Link>
+            ))}
           </Nav>
-          {/* <NavDropdown
+        </Navbar.Collapse>
+        {/* <NavDropdown
+          title="Node Properties"
+          autoClose="inside"
+          drop="down"
+          align={{ lg: "end" }}
+          id="diagram-properties"
+        >
+          <NavDropdown.Header as="div">
+            <Properties node={node} />
+          </NavDropdown.Header>
+        </NavDropdown> */}
+      </Container>
+    </Navbar>
+  );
+}
+
+export default DAGNavBar;
+
+{
+  /* <NavDropdown
             title="Node Properties"
             autoClose="inside"
             drop="down"
@@ -45,11 +78,5 @@ function DAGNavBar({ node }) {
             <NavDropdown.Header as="div">
               <Properties node={node} />
             </NavDropdown.Header>
-          </NavDropdown> */}
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
+          </NavDropdown> */
 }
-
-export default DAGNavBar;
