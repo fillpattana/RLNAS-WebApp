@@ -57,7 +57,7 @@ function Agents() {
   return (
     <div>
       <Container className="agents-background">
-        <div className="dag-container">
+        <div className="elements-container">
           <Row>
             <h3 className="topic-name">
               Network Architecture - Direct Acyclic Graph
