@@ -10,17 +10,25 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import trainingData from "../assets/trainingData.json";
+import trainingDataNoIteration from "../assets/trainingDataNoIteration.json";
 
 // BiaxialLineChart accepts [{"iterationNumber":0,"accuracy":0.1,"trainingTime":100},{"iterationNumber":n,"accuracy":n,"trainingTime":n}]
 
 function BiaxialLineChart() {
-  // Transform data arrays into an array of objects
+  // Transform data arrays into an array of objects with iterationNumber in JSON
   const data =
     trainingData.iterationNumber?.map((iteration, index) => ({
       iterationNumber: iteration,
       accuracy: trainingData.accuracy[index],
       trainingTime: trainingData.trainingTime[index],
     })) || [];
+
+  // const data =
+  //   trainingDataNoIteration.accuracy?.map((accuracy, index) => ({
+  //     iterationNumber: index, // Use the index as the iteration number
+  //     accuracy: accuracy,
+  //     trainingTime: trainingDataNoIteration.trainingTime[index],
+  //   })) || [];
   console.log("Chart Re-rendered");
 
   return (
