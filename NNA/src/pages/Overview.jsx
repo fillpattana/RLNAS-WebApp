@@ -9,14 +9,18 @@ function Overview() {
     <div>
       <Container>
         <Row>
-          <Col>
-            <h3> Overall Epoch/Loss of All Agents </h3>
-            <LossChart />
-          </Col>
-          <Col>
-            <h3> Overall Training Time and Accuracy of All Agents </h3>
-            <BiaxialLineChart />
-          </Col>
+          <div className="elements-container">
+            <Col>
+              <h3> Overall Epoch/Loss of All Agents </h3>
+              <LossChart />
+            </Col>
+          </div>
+          <div className="elements-container">
+            <Col>
+              <h3> Overall Training Time and Accuracy of All Agents </h3>
+              <BiaxialLineChart />
+            </Col>
+          </div>
         </Row>
       </Container>
     </div>
