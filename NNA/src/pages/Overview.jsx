@@ -1,4 +1,4 @@
-import SingleLineChart from "../components/SingleLineChart";
+import LossChart from "../components/LossChart";
 import BiaxialLineChart from "../components/BiaxialChart";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -11,7 +11,7 @@ function Overview() {
         <Row>
           <Col>
             <h3> Overall Epoch/Loss of All Agents </h3>
-            <SingleLineChart />
+            <LossChart />
           </Col>
           <Col>
             <h3> Overall Training Time and Accuracy of All Agents </h3>

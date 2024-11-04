@@ -41,7 +41,7 @@ const data = [
   },
 ];
 
-function SingleLineChart() {
+function LossChart() {
   data.iterationNumber?.map((iteration, index) => ({
     iterationNumber: iteration,
     accuracy: trainingData.accuracy[index],
@@ -87,4 +87,4 @@ function SingleLineChart() {
   );
 }
 
-export default SingleLineChart;
+export default LossChart;

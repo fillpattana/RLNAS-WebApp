@@ -8,7 +8,7 @@ import Carousel from "react-bootstrap/Carousel";
 import BiaxialChart from "../components/BiaxialChart";
 import DAGSugi from "../components/DAGSugi";
 import DAGNavBar from "../components/dagComps/DAGNavBar";
-import SingleLineChart from "../components/SingleLineChart";
+import LossChart from "../components/LossChart";
 import Episodes from "../components/Episodes";
 // Styles
 import "../styles/Agents.css";
