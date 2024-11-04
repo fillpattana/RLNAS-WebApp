@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 // Bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -66,6 +66,28 @@ function Agents() {
   const [index, setIndex] = useState(0);
   const [activeEpisode, setActiveEpisode] = useState(episodes[0]);
   const [activeAgent, setActiveAgent] = useState(agents[0].id);
+  const [highlightAgent, setHighlightAgent] = useState("");
+  const [highlightEpisode, setHighlightEpisode] = useState("");
+  const [highlightProps, setHighlightProps] = useState("");
+
+  useEffect(() => {
+    setHighlightAgent("highlight");
+    const timer = setTimeout(() => setHighlightAgent(""), 500); // Remove class after animation
+    return () => clearTimeout(timer);
+  }, [activeAgent]);
+
+  useEffect(() => {
+    setHighlightEpisode("highlight");
+    const timer = setTimeout(() => setHighlightEpisode(""), 500);
+    return () => clearTimeout(timer);
+  }, [activeEpisode]);
+
+  useEffect(() => {
+    setHighlightProps("highlight");
+    const timer = setTimeout(() => setHighlightProps(""), 500);
+    return () => clearTimeout(timer);
+  }, [selectedNode]);
+
   //   const [activeIteration, setActiveIteration] = useState(iterations[0]);
 
   const handleAgentChange = (agentId) => {
@@ -146,8 +168,10 @@ function Agents() {
                       />
                       <DAGSugi onNodeClick={handleNodeClick} />
                       <Carousel.Caption>
-                        <h5>{activeAgent}</h5>
-                        <p>{activeEpisode.name} - Iteration 1</p>
+                        <h5 className={highlightAgent}>{activeAgent}</h5>
+                        <p className={highlightEpisode}>
+                          {activeEpisode.name} - Iteration 1
+                        </p>
                       </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>
@@ -158,8 +182,10 @@ function Agents() {
                       />
                       <DAGSugi onNodeClick={handleNodeClick} />
                       <Carousel.Caption>
-                        <h5>{activeAgent}</h5>
-                        <p>{activeEpisode.name} - Iteration 2</p>
+                        <h5 className={highlightAgent}>{activeAgent}</h5>
+                        <p className={highlightEpisode}>
+                          {activeEpisode.name} - Iteration 2
+                        </p>
                       </Carousel.Caption>
                     </Carousel.Item>
                   </Carousel>
@@ -171,7 +197,7 @@ function Agents() {
         <div className="elements-container">
           <Row>
             <Col>
-              <h3 className="topic-name">
+              <h3 className={`topic-name ${highlightAgent}`}>
                 {activeAgent}'s Training Time and Accuracy
               </h3>
               <div className="shadow-lg rounded">
@@ -181,7 +207,9 @@ function Agents() {
               </div>
             </Col>
             <Col>
-              <h3 className="topic-name">Node Properties</h3>
+              <h3 className={`topic-name ${highlightProps}`}>
+                Node Properties
+              </h3>
               <div className="shadow-lg rounded">
                 <Properties node={selectedNode} />
               </div>

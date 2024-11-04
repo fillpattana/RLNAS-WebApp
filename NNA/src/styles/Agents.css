@@ -41,3 +41,20 @@
 .carousel-control-next-icon {
   pointer-events: auto;
 }
+
+.carousel-caption {
+  pointer-events: none;
+}
+
+.highlight {
+  animation: highlight 1s ease-in-out;
+}
+
+@keyframes highlight {
+  0% {
+    color: #087cfc;
+  }
+  100% {
+    color: inherit;
+  }
+}
