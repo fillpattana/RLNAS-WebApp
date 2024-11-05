@@ -5,18 +5,6 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Properties from "../Properties";
 
-// Define the list of agents at the top
-const agents = [
-  "Agent 1",
-  "Agent 2",
-  "Agent 3",
-  "Agent 4",
-  "Agent 5",
-  "Agent 6",
-  "Agent 7",
-  "Agent 8",
-];
-
 function AgentSelect({ agents, activeAgent, onAgentChange }) {
   return (
     <Navbar

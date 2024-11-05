@@ -8,7 +8,6 @@ import Carousel from "react-bootstrap/Carousel";
 import PerformanceChart from "../components/PerformanceChart";
 import DAGSugi from "../components/DAGSugi";
 import AgentsTab from "../components/dagComps/AgentSelect";
-import LossChart from "../components/LossChart";
 import EpisodeList from "../components/dagComps/EpisodeSelect";
 // Styles
 import "../styles/Agents.css";
