@@ -7,9 +7,9 @@ import Carousel from "react-bootstrap/Carousel";
 // Components
 import PerformanceChart from "../components/PerformanceChart";
 import DAGSugi from "../components/DAGSugi";
-import DAGNavBar from "../components/dagComps/DAGNavBar";
+import AgentsTab from "../components/dagComps/AgentSelect";
 import LossChart from "../components/LossChart";
-import Episodes from "../components/Episodes";
+import EpisodeList from "../components/dagComps/EpisodeSelect";
 // Styles
 import "../styles/Agents.css";
 import Properties from "../components/Properties";
@@ -121,7 +121,7 @@ function Agents() {
               Network Architecture - Direct Acyclic Graph
             </h3>
             <Col>
-              <Episodes
+              <EpisodeList
                 episode={episodes}
                 activeEpisode={activeEpisode}
                 onEpisodeClick={handleEpisodeClick}
@@ -139,7 +139,7 @@ function Agents() {
                   >
                     {iterations.map((iteration) => (
                       <Carousel.Item key={iteration.id}>
-                        <DAGNavBar
+                        <AgentsTab
                           agents={agents}
                           activeAgent={activeAgent}
                           onAgentChange={handleAgentChange}
@@ -162,7 +162,7 @@ function Agents() {
                     data-bs-theme="dark"
                   >
                     <Carousel.Item>
-                      <DAGNavBar
+                      <AgentsTab
                         agents={agents}
                         activeAgent={activeAgent}
                         onAgentChange={handleAgentChange}
@@ -176,7 +176,7 @@ function Agents() {
                       </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>
-                      <DAGNavBar
+                      <AgentsTab
                         agents={agents}
                         activeAgent={activeAgent}
                         onAgentChange={handleAgentChange}

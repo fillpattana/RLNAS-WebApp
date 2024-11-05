@@ -1,7 +1,7 @@
 import ListGroup from "react-bootstrap/ListGroup";
-import "../styles/Episodes.css";
+import "../../styles/Episodes.css";
 
-function Episodes({ episode, activeEpisode, onEpisodeClick }) {
+function EpisodeSelect({ episode, activeEpisode, onEpisodeClick }) {
   return (
     <ListGroup as="ol" className="list-group-scrollable">
       {episode.map((agent, index) => (
@@ -24,4 +24,4 @@ function Episodes({ episode, activeEpisode, onEpisodeClick }) {
   );
 }
 
-export default Episodes;
+export default EpisodeSelect;

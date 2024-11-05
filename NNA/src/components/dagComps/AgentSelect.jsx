@@ -17,7 +17,7 @@ const agents = [
   "Agent 8",
 ];
 
-function DAGNavBar({ agents, activeAgent, onAgentChange }) {
+function AgentSelect({ agents, activeAgent, onAgentChange }) {
   return (
     <Navbar
       bg="light"
@@ -65,18 +65,4 @@ function DAGNavBar({ agents, activeAgent, onAgentChange }) {
   );
 }
 
-export default DAGNavBar;
-
-{
-  /* <NavDropdown
-            title="Node Properties"
-            autoClose="inside"
-            drop="down"
-            align={{ lg: "end" }}
-            id="diagram-properties"
-          >
-            <NavDropdown.Header as="div">
-              <Properties node={node} />
-            </NavDropdown.Header>
-          </NavDropdown> */
-}
+export default AgentSelect;
