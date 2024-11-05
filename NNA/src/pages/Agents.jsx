@@ -1,5 +1,5 @@
 import { useCallback, useState, useRef } from "react";
-import BiaxialChart from "../components/BiaxialChart";
+import PerformanceChart from "../components/PerformanceChart";
 import DAGTopo from "../components/DAGTopo";
 import DAGSugi from "../components/DAGSugi";
 import Properties from "../components/Properties";

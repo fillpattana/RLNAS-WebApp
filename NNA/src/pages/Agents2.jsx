@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
 // Components
-import BiaxialChart from "../components/BiaxialChart";
+import PerformanceChart from "../components/PerformanceChart";
 import DAGSugi from "../components/DAGSugi";
 import DAGNavBar from "../components/dagComps/DAGNavBar";
 import LossChart from "../components/LossChart";
@@ -203,7 +203,7 @@ function Agents() {
               </h3>
               <div className="shadow-lg rounded">
                 <div className="centered-container">
-                  <BiaxialChart />
+                  <PerformanceChart />
                 </div>
               </div>
             </Col>

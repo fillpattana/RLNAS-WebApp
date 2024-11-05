@@ -14,7 +14,7 @@ import trainingDataNoIteration from "../assets/trainingDataNoIteration.json";
 
 // BiaxialLineChart accepts [{"iterationNumber":0,"accuracy":0.1,"trainingTime":100},{"iterationNumber":n,"accuracy":n,"trainingTime":n}]
 
-function BiaxialLineChart() {
+function PerformanceChart() {
   // Transform data arrays into an array of objects with iterationNumber in JSON
   const data =
     trainingData.iterationNumber?.map((iteration, index) => ({
@@ -93,4 +93,4 @@ function BiaxialLineChart() {
   );
 }
 
-export default BiaxialLineChart;
+export default PerformanceChart;
