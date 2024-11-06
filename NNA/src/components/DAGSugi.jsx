@@ -3,11 +3,10 @@ import { MultiDirectedGraph } from "graphology";
 import Sigma from "sigma";
 import { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
 import { EdgeArrowProgram } from "sigma/rendering";
-import nodeDataWithConv3 from "../assets/nodeDataWithConv3.json";
 import nodeDataSamp1 from "../assets/nodeDataSamp1.json";
 import sugiyamaLayout from "./dagComps/sugiyamaLayout";
 
-const sigmaStyle = { height: "50vh", width: "100vh" };
+const sigmaStyle = { height: "500px", width: "1000px" };
 
 // Function for graph init with Sugiyama layout applied
 const createGraphSugiyama = (graph, data) => {
@@ -82,6 +81,7 @@ function DAGSugi({ onNodeClick }) {
       defaultEdgeType: "curve",
       edgeProgramClasses: { curve: EdgeCurvedArrowProgram },
       hideLabelsOnMove: false,
+      allowInvalidContainer: true,
       labelDensity: 10,
     });
 
@@ -139,6 +139,13 @@ function DAGSugi({ onNodeClick }) {
 
     renderer.getMouseCaptor().on("mousedown", () => {
       if (!renderer.getCustomBBox()) renderer.setCustomBBox(renderer.getBBox());
+    });
+
+    renderer.on("enterNode", () => {
+      containerRef.current.style.cursor = "pointer";
+    });
+    renderer.on("leaveNode", () => {
+      containerRef.current.style.cursor = "default";
     });
 
     sigmaInstanceRef.current = renderer;

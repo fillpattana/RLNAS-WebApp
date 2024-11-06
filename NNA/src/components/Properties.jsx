@@ -2,8 +2,7 @@ function Properties({ node }) {
   if (!node) return <div>Select a node to see details</div>;
 
   return (
-    <div>
-      <h5>Node Details</h5>
+    <div style={{ padding: 20, margin: 2 }}>
       <p>
         <strong>Node Number:</strong> {node.id}
       </p>
@@ -14,7 +13,7 @@ function Properties({ node }) {
         <strong>Activation Function:</strong> {node.activation}
       </p>
       <p>
-        <strong>Weights:</strong>{" "}
+        <strong>Weights:</strong>
         <span style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>
           {JSON.stringify(node.weights)}
         </span>
