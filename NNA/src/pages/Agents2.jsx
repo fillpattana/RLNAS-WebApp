@@ -12,6 +12,7 @@ import EpisodeList from "../components/dagComps/EpisodeSelect";
 // Styles
 import "../styles/Agents.css";
 import Properties from "../components/Properties";
+import TablesList from "../BackendTest/TablesList";
 // Samples
 
 const agents = [
@@ -212,6 +213,18 @@ function Agents() {
               </h3>
               <div className="shadow-lg rounded">
                 <Properties node={selectedNode} />
+              </div>
+            </Col>
+          </Row>
+        </div>
+        <div className="elements-container">
+          <Row>
+            <Col>
+              <h3> BackEnd Test </h3>
+              <div className="shadow-lg rounded">
+                <div className="centered-container">
+                  <TablesList />
+                </div>
               </div>
             </Col>
           </Row>

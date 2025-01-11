@@ -29,7 +29,7 @@ function PerformanceChart() {
   //     accuracy: accuracy,
   //     trainingTime: trainingDataNoIteration.trainingTime[index],
   //   })) || [];
-  console.log("Chart Re-rendered");
+  // console.log("Chart Re-rendered");
 
   return (
     <ResponsiveContainer width="100%" height={400}>
