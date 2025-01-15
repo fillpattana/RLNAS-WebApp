@@ -29,7 +29,6 @@ function Agents() {
         </div>
         <h3> PerformanceChart </h3>
         <PerformanceChart /> */}
-        <Agents2 />
       </div>
     </>
   );
