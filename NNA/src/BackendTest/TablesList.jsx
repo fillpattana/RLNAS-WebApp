@@ -7,7 +7,7 @@ function TablesList() {
   // Fetch initial data and set up WebSocket connection
   useEffect(() => {
     // Fetch initial table data
-    fetch("http://localhost:3000/Graph")
+    fetch("http://localhost:3000/api/Graph")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response issue");
