@@ -203,7 +203,7 @@ function Agents() {
               </h3>
               <div className="shadow-lg rounded">
                 <div className="centered-container">
-                  <PerformanceChart graphId={23} />
+                  <PerformanceChart agentNum={2} episodeNum={1} />
                 </div>
               </div>
             </Col>
