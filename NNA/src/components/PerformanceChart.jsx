@@ -22,7 +22,9 @@ function PerformanceChart({ agentNum, episodeNum }) {
           `http://localhost:3000/api/IterationMetric?agentNum=${agentNum}&episodeNum=${episodeNum}`
         );
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error(
+            `Performance chart is receiving agentNum=${agentNum}&episodeNum=${episodeNum}`
+          );
         }
         const result = await response.json();
 
