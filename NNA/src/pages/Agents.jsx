@@ -201,7 +201,14 @@ function Agents() {
               <h3>{activeAgent}'s Training Time and Accuracy</h3>
               <div className="shadow-lg rounded">
                 <div className="centered-container">
-                  <PerformanceChart agentNum={2} episodeNum={1} />
+                  {activeAgent && activeEpisode ? (
+                    <PerformanceChart
+                      agentNum={activeAgent.split(" ")[1]}
+                      episodeNum={activeEpisode.name.split(" ")[1]}
+                    />
+                  ) : (
+                    <p>Loading Performance Chart...</p>
+                  )}
                 </div>
               </div>
             </Col>

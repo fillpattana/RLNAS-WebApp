@@ -31,8 +31,8 @@ function PerformanceChart({ agentNum, episodeNum }) {
         // Transform backend data to the format required by the chart
         const transformedData = result.map((item, index) => ({
           iterationNumber: index + 1, // Use index as iteration number
-          accuracy: parseFloat(item.Accuracy),
-          trainingTime: parseInt(item.TrainingTime, 10),
+          Accuracy: parseFloat(item.Accuracy),
+          TrainingTime: parseInt(item.TrainingTime, 10),
         }));
 
         setChartData(transformedData);
@@ -103,7 +103,7 @@ function PerformanceChart({ agentNum, episodeNum }) {
         <Line
           yAxisId="right"
           type="monotone"
-          dataKey="Training Time"
+          dataKey="TrainingTime"
           stroke="#82ca9d"
         />
       </LineChart>
