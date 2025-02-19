@@ -96,14 +96,14 @@ function PerformanceChart({ agentNum, episodeNum }) {
         <Line
           yAxisId="left"
           type="monotone"
-          dataKey="accuracy"
+          dataKey="Accuracy"
           stroke="#8884d8"
           activeDot={{ r: 8 }}
         />
         <Line
           yAxisId="right"
           type="monotone"
-          dataKey="trainingTime"
+          dataKey="Training Time"
           stroke="#82ca9d"
         />
       </LineChart>
