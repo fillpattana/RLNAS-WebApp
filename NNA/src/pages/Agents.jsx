@@ -10,6 +10,7 @@ import EpisodeList from "../components/dagComps/EpisodeSelect";
 import "../styles/Agents.css";
 import Properties from "../components/Properties";
 import TablesList from "../BackendTest/TablesList";
+import DAGTest from "../components/DAGTest";
 
 function Agents() {
   const [agents, setAgents] = useState([]);
@@ -17,10 +18,12 @@ function Agents() {
   const [index, setIndex] = useState(0);
   const [episodes, setEpisodes] = useState([]);
   const [activeEpisode, setActiveEpisode] = useState(null);
+  const [iterationCount, setIterationCount] = useState(0);
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
   const timestamp = "2025-01-02 10:10:10";
 
+  //get total number of agents for the running session
   useEffect(() => {
     const fetchAgentCount = async () => {
       try {
@@ -55,10 +58,11 @@ function Agents() {
     fetchAgentCount();
   }, [timestamp]);
 
+  //gets total number of episodes for the active agent
   useEffect(() => {
     if (activeAgent) {
+      setIndex(0); // Reset iteration index
       const agentNum = activeAgent.split(" ")[1]; // Extract number from "Agent 1"
-      console.log("Fetching episode count for agent:", agentNum);
 
       const fetchEpisodeCount = async () => {
         try {
@@ -92,6 +96,39 @@ function Agents() {
     }
   }, [activeAgent]);
 
+  //gets total number of iterations for the active agent and episode
+  useEffect(() => {
+    if (activeAgent && activeEpisode) {
+      setIndex(0); // Reset iteration index
+      const agentNum = activeAgent.split(" ")[1]; // Get agent number
+      const episodeNum = activeEpisode.name.split(" ")[1]; // Get episode number
+
+      console.log("Fetching Iterations for agentNum:", agentNum);
+      console.log("Fetching Iterations for episodeNum:", episodeNum);
+
+      const fetchIterationCount = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/api/IterationCount/${encodeURIComponent(
+              agentNum
+            )}/${encodeURIComponent(episodeNum)}`
+          );
+          const data = await response.json();
+
+          if (data.TotalIterations) {
+            setIterationCount(parseInt(data.TotalIterations, 10));
+          } else {
+            setIterationCount(0);
+          }
+        } catch (error) {
+          console.error("Error fetching iteration count:", error);
+        }
+      };
+
+      fetchIterationCount();
+    }
+  }, [activeAgent, activeEpisode]);
+
   const handleAgentChange = (agentId) => setActiveAgent(agentId);
   const handleEpisodeClick = (episode) => setActiveEpisode(episode);
   const handleNextIteration = (selectedIndex) => setIndex(selectedIndex);
@@ -118,38 +155,34 @@ function Agents() {
             <Col>
               <div className="centered-container">
                 <div className="shadow-lg rounded">
-                  {agents.length > 0 ? (
+                  {agents.length > 0 && iterationCount > 0 ? (
                     <Carousel
                       fade
                       interval={null}
                       activeIndex={index}
-                      onSelect={handleNextIteration}
+                      onSelect={(selectedIndex) => setIndex(selectedIndex)}
                       data-bs-theme="dark"
                     >
-                      <Carousel.Item>
-                        <AgentsTab
-                          agents={agents}
-                          activeAgent={activeAgent}
-                          onAgentChange={handleAgentChange}
-                        />
-                        <DAGSugi onNodeClick={handleNodeClick} />
-                        <Carousel.Caption>
-                          <h5>{activeAgent}</h5>
-                          <p>{activeEpisode?.name} - Iteration 1</p>
-                        </Carousel.Caption>
-                      </Carousel.Item>
-                      <Carousel.Item>
-                        <AgentsTab
-                          agents={agents}
-                          activeAgent={activeAgent}
-                          onAgentChange={handleAgentChange}
-                        />
-                        <DAGSugi onNodeClick={handleNodeClick} />
-                        <Carousel.Caption>
-                          <h5>{activeAgent}</h5>
-                          <p>{activeEpisode?.name} - Iteration 2</p>
-                        </Carousel.Caption>
-                      </Carousel.Item>
+                      {Array.from({ length: iterationCount }, (_, i) => (
+                        <Carousel.Item key={i}>
+                          <AgentsTab
+                            agents={agents}
+                            activeAgent={activeAgent}
+                            onAgentChange={handleAgentChange}
+                          />
+                          <DAGTest
+                            iteration={i + 1}
+                            agent={activeAgent}
+                            episode={activeEpisode?.name}
+                          />
+                          <Carousel.Caption>
+                            <h5>{activeAgent}</h5>
+                            <p>
+                              {activeEpisode?.name} - Iteration {i + 1}
+                            </p>
+                          </Carousel.Caption>
+                        </Carousel.Item>
+                      ))}
                     </Carousel>
                   ) : (
                     <p>
