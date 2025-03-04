@@ -34,8 +34,8 @@ function Agents() {
         );
         const data = await response.json();
 
-        if (data.TotalAgents) {
-          const totalAgents = parseInt(data.TotalAgents, 10);
+        if (data.totalagents) {
+          const totalAgents = parseInt(data.totalagents, 10);
           const generatedAgents = Array.from(
             { length: totalAgents },
             (_, i) => ({
@@ -73,8 +73,8 @@ function Agents() {
           );
           const data = await response.json();
 
-          if (data.TotalEpisodes) {
-            const totalEpisodes = parseInt(data.TotalEpisodes, 10);
+          if (data.totalepisodes) {
+            const totalEpisodes = parseInt(data.totalepisodes, 10);
             const generatedEpisodes = Array.from(
               { length: totalEpisodes },
               (_, i) => ({
@@ -115,8 +115,8 @@ function Agents() {
           );
           const data = await response.json();
 
-          if (data.TotalIterations) {
-            setIterationCount(parseInt(data.TotalIterations, 10));
+          if (data.totaliterations) {
+            setIterationCount(parseInt(data.totaliterations, 10));
           } else {
             setIterationCount(0);
           }

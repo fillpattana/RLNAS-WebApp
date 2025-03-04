@@ -31,14 +31,14 @@ function PerformanceChart({ agentNum, episodeNum }) {
         // Transform backend data to the format required by the chart
         const transformedData = result.map((item, index) => ({
           iterationNumber: index + 1, // Use index as iteration number
-          Accuracy: parseFloat(item.Accuracy),
-          TrainingTime: parseInt(item.TrainingTime, 10),
+          accuracy: parseFloat(item.accuracy),
+          trainingtime: parseInt(item.trainingtime, 10),
         }));
 
         setChartData(transformedData);
 
         console.log(
-          `Data fetched for AgentNum ${agentNum}, EpisodeNum ${episodeNum}:`,
+          `Performance Chart data fetched for AgentNum ${agentNum}, EpisodeNum ${episodeNum}:`,
           transformedData
         );
       } catch (error) {
@@ -96,14 +96,14 @@ function PerformanceChart({ agentNum, episodeNum }) {
         <Line
           yAxisId="left"
           type="monotone"
-          dataKey="Accuracy"
+          dataKey="accuracy"
           stroke="#8884d8"
           activeDot={{ r: 8 }}
         />
         <Line
           yAxisId="right"
           type="monotone"
-          dataKey="TrainingTime"
+          dataKey="trainingtime"
           stroke="#82ca9d"
         />
       </LineChart>

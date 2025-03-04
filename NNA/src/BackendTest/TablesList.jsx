@@ -33,7 +33,7 @@ function TablesList() {
         setTables((prevTables) => {
           // Check if the data already exists
           const existingRowIndex = prevTables.findIndex(
-            (row) => row.GraphId === realTimeData.GraphId
+            (row) => row.graphid === realTimeData.graphid
           );
 
           if (existingRowIndex !== -1) {
