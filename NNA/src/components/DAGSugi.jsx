@@ -3,7 +3,8 @@ import { MultiDirectedGraph } from "graphology";
 import Sigma from "sigma";
 import { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
 import { EdgeArrowProgram } from "sigma/rendering";
-import nodeDataSamp2 from "../assets/nodeDataSamp2.json";
+import nodeDataSamp2 from "../assets/nodeDataSamp2.json"; //first iteration
+import nodeDataSamp3 from "../assets/nodeDataSamp3.json"; //11th(last) iteration
 import sugiyamaLayout from "./dagComps/sugiyamaLayout";
 
 const sigmaStyle = { height: "500px", width: "1000px" };
@@ -63,7 +64,7 @@ const createGraphSugiyama = (graph, data) => {
 function DAGSugi({ onNodeClick }) {
   const containerRef = useRef(null);
   const sigmaInstanceRef = useRef(null);
-  const [graphData, setGraphData] = useState(nodeDataSamp2);
+  const [graphData, setGraphData] = useState(nodeDataSamp3);
   const hasMountedRef = useRef(false); // Track if component has mounted before
 
   useEffect(() => {
@@ -78,7 +79,7 @@ function DAGSugi({ onNodeClick }) {
     // Initialize Sigma instance
     const renderer = new Sigma(graph, containerRef.current, {
       defaultEdgeType: "curve",
-      edgeProgramClasses: { curve: EdgeCurvedArrowProgram },
+      edgeProgramClasses: { curve: EdgeArrowProgram },
       hideLabelsOnMove: false,
       allowInvalidContainer: true,
       labelDensity: 10,

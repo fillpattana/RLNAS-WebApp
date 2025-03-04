@@ -170,11 +170,12 @@ function Agents() {
                             activeAgent={activeAgent}
                             onAgentChange={handleAgentChange}
                           />
-                          <DAGTest
+                          {/* <DAGTest
                             iteration={i + 1}
                             agent={activeAgent}
                             episode={activeEpisode?.name}
-                          />
+                          /> */}
+                          <DAGSugi onNodeClick={handleNodeClick} />
                           <Carousel.Caption>
                             <h5>{activeAgent}</h5>
                             <p>
