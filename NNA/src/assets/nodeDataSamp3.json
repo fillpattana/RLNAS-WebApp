@@ -1,0 +1,182 @@
+{
+  "Graph": {
+    "edges": {
+      "senders": [0, 1, 2, 0, 4, 5, 4, 6, 3, 2, 7, 3, 8, 3, 10, 9, 10],
+      "receivers": [1, 2, 3, 4, 5, 3, 6, 2, 7, 7, 8, 8, 9, 10, 9, 11, 11]
+    },
+    "nodes": [
+      {
+        "type": "convolutional",
+        "index": 1,
+        "params": {
+          "biases": [0.2, 0.1, 0.5, 0.3],
+          "weights": [
+            [
+              [0.1, 0.54, 0.2, 0.47],
+              [0.5, 0.32, 0.2, 0.15],
+              [0.11, 0.76, 0.3, 0.2]
+            ],
+            [
+              [0.1, 0.54, 0.2, 0.47],
+              [0.5, 0.32, 0.2, 0.15],
+              [0.11, 0.76, 0.3, 0.2]
+            ]
+          ]
+        },
+        "activation": {
+          "type": "maxpool"
+        }
+      },
+      {
+        "type": "convolutional",
+        "index": 4,
+        "params": {
+          "biases": [0.05, 0.15],
+          "weights": [
+            [
+              [0.15, 0.25, 0.35],
+              [0.45, 0.55, 0.65]
+            ],
+            [
+              [0.15, 0.25, 0.35],
+              [0.45, 0.55, 0.65]
+            ]
+          ]
+        },
+        "activation": {
+          "type": "sigmoid"
+        }
+      },
+      {
+        "type": "dense",
+        "index": 2,
+        "params": {
+          "biases": [0.2, 0.1],
+          "weights": [
+            [0.1, 0.54, 0.2, 0.22],
+            [0.1, 0.24, 0.52, 0.12]
+          ]
+        },
+        "activation": {
+          "type": "relu"
+        }
+      },
+      {
+        "type": "dense",
+        "index": 3,
+        "params": {
+          "biases": [0.2, 0.4],
+          "weights": [
+            [0.5, 0.32, 0.1],
+            [0.12, 0.42, 0.33]
+          ]
+        },
+        "activation": {
+          "type": "sigmoid"
+        }
+      },
+      {
+        "type": "dense",
+        "index": 5,
+        "params": {
+          "biases": [0.12, 0.22],
+          "weights": [
+            [0.75, 0.12],
+            [0.43, 0.56]
+          ]
+        },
+        "activation": {
+          "type": "tanh"
+        }
+      },
+      {
+        "type": "dense",
+        "index": 6,
+        "params": {
+          "biases": [0.2, 0.1],
+          "weights": [
+            [0.1, 0.54, 0.2, 0.22],
+            [0.1, 0.24, 0.52, 0.12]
+          ]
+        },
+        "activation": {
+          "type": "relu"
+        }
+      },
+      {
+        "type": "dense",
+        "index": 7,
+        "params": {
+          "biases": [0.2, 0.4],
+          "weights": [
+            [0.5, 0.32, 0.1],
+            [0.12, 0.42, 0.33]
+          ]
+        },
+        "activation": {
+          "type": "sigmoid"
+        }
+      },
+      {
+        "type": "dense",
+        "index": 8,
+        "params": {
+          "biases": [0.12, 0.22],
+          "weights": [
+            [0.75, 0.12],
+            [0.43, 0.56]
+          ]
+        },
+        "activation": {
+          "type": "tanh"
+        }
+      },
+      {
+        "type": "dense",
+        "index": 9,
+        "params": {
+          "biases": [0.2, 0.1],
+          "weights": [
+            [0.1, 0.54, 0.2, 0.22],
+            [0.1, 0.24, 0.52, 0.12]
+          ]
+        },
+        "activation": {
+          "type": "relu"
+        }
+      },
+      {
+        "type": "dense",
+        "index": 10,
+        "params": {
+          "biases": [0.2, 0.4],
+          "weights": [
+            [0.5, 0.32, 0.1],
+            [0.12, 0.42, 0.33]
+          ]
+        },
+        "activation": {
+          "type": "sigmoid"
+        }
+      },
+      {
+        "type": "dense",
+        "index": 11,
+        "params": {
+          "biases": [0.12, 0.22],
+          "weights": [
+            [0.75, 0.12],
+            [0.43, 0.56]
+          ]
+        },
+        "activation": {
+          "type": "tanh"
+        }
+      },
+      {
+        "type": "input",
+        "index": 0
+      }
+    ]
+  }
+}

@@ -9,32 +9,50 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import trainingData from "../assets/trainingData.json";
-import trainingDataNoIteration from "../assets/trainingDataNoIteration.json";
 
-// BiaxialLineChart accepts [{"iterationNumber":0,"accuracy":0.1,"trainingTime":100},{"iterationNumber":n,"accuracy":n,"trainingTime":n}]
+function PerformanceChart({ agentNum, episodeNum }) {
+  const [chartData, setChartData] = useState([]);
 
-function PerformanceChart() {
-  // Transform data arrays into an array of objects with iterationNumber in JSON
-  const data =
-    trainingData.iterationNumber?.map((iteration, index) => ({
-      iterationNumber: iteration,
-      accuracy: trainingData.accuracy[index],
-      trainingTime: trainingData.trainingTime[index],
-    })) || [];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("Fetching Iteration Metrics...");
 
-  // const data =
-  //   trainingDataNoIteration.accuracy?.map((accuracy, index) => ({
-  //     iterationNumber: index, // Use the index as the iteration number
-  //     accuracy: accuracy,
-  //     trainingTime: trainingDataNoIteration.trainingTime[index],
-  //   })) || [];
-  // console.log("Chart Re-rendered");
+        const response = await fetch(
+          `http://localhost:3000/api/IterationMetric?agentNum=${agentNum}&episodeNum=${episodeNum}`
+        );
+        if (!response.ok) {
+          throw new Error(
+            `Performance chart is receiving agentNum=${agentNum}&episodeNum=${episodeNum}`
+          );
+        }
+        const result = await response.json();
+
+        // Transform backend data to the format required by the chart
+        const transformedData = result.map((item, index) => ({
+          iterationNumber: index + 1, // Use index as iteration number
+          accuracy: parseFloat(item.accuracy),
+          trainingtime: parseInt(item.trainingtime, 10),
+        }));
+
+        setChartData(transformedData);
+
+        console.log(
+          `Performance Chart data fetched for AgentNum ${agentNum}, EpisodeNum ${episodeNum}:`,
+          transformedData
+        );
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    };
+
+    fetchData();
+  }, [agentNum, episodeNum]);
 
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart
-        data={data}
+        data={chartData}
         margin={{
           top: 5,
           right: 30,
@@ -85,7 +103,7 @@ function PerformanceChart() {
         <Line
           yAxisId="right"
           type="monotone"
-          dataKey="trainingTime"
+          dataKey="trainingtime"
           stroke="#82ca9d"
         />
       </LineChart>

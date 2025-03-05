@@ -7,7 +7,7 @@ function TablesList() {
   // Fetch initial data and set up WebSocket connection
   useEffect(() => {
     // Fetch initial table data
-    fetch("http://localhost:3000/Graph")
+    fetch("http://localhost:3000/api/Graph")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response issue");
@@ -33,7 +33,7 @@ function TablesList() {
         setTables((prevTables) => {
           // Check if the data already exists
           const existingRowIndex = prevTables.findIndex(
-            (row) => row.GraphId === realTimeData.GraphId
+            (row) => row.graphid === realTimeData.graphid
           );
 
           if (existingRowIndex !== -1) {
