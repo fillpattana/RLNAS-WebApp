@@ -5,6 +5,7 @@ import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
 import PerformanceChart from "../components/PerformanceChart";
 import DAGSugi from "../components/DAGSugi";
+import DAGSugiDev from "../components/DAGSugiDev";
 import AgentsTab from "../components/dagComps/AgentSelect";
 import EpisodeList from "../components/dagComps/EpisodeSelect";
 import "../styles/Agents.css";
@@ -35,9 +36,9 @@ function Agents() {
         const data = await response.json();
 
         if (data.totalagents) {
-          const totalAgents = parseInt(data.totalagents, 10);
+          const totalagents = parseInt(data.totalagents, 10);
           const generatedAgents = Array.from(
-            { length: totalAgents },
+            { length: totalagents },
             (_, i) => ({
               id: `Agent ${i + 1}`,
               name: `Agent ${i + 1}`,
@@ -74,9 +75,9 @@ function Agents() {
           const data = await response.json();
 
           if (data.totalepisodes) {
-            const totalEpisodes = parseInt(data.totalepisodes, 10);
+            const totalepisodes = parseInt(data.totalepisodes, 10);
             const generatedEpisodes = Array.from(
-              { length: totalEpisodes },
+              { length: totalepisodes },
               (_, i) => ({
                 name: `Episode ${i + 1}`,
               })
@@ -146,6 +147,7 @@ function Agents() {
               Network Architecture - Direct Acyclic Graph
             </h3>
             <Col>
+              {/* Realtime */}
               <EpisodeList
                 episode={episodes}
                 activeEpisode={activeEpisode}
@@ -170,12 +172,17 @@ function Agents() {
                             activeAgent={activeAgent}
                             onAgentChange={handleAgentChange}
                           />
-                          {/* <DAGTest
+                          <DAGTest
                             iteration={i + 1}
                             agent={activeAgent}
                             episode={activeEpisode?.name}
+                          />
+                          {/* <DAGSugiDev
+                            agentNum={activeAgent.split(" ")[1]}
+                            episodeNum={activeEpisode.name.split(" ")[1]}
+                            iterationNum={index + 1}
+                            onNodeClick={handleNodeClick}
                           /> */}
-                          <DAGSugi onNodeClick={handleNodeClick} />
                           <Carousel.Caption>
                             <h5>{activeAgent}</h5>
                             <p>
