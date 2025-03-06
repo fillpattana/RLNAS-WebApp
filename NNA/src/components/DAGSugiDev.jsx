@@ -8,7 +8,8 @@ const sigmaStyle = { height: "500px", width: "1000px" };
 
 // Function to initialize graph with Sugiyama layout applied
 const createGraphSugiyama = (graph, data) => {
-  console.log("createGraphSugiyama called");
+  console.trace();
+  // console.log("createGraphSugiyama called");
 
   if (!data || !data.Graph) {
     console.error("Invalid DAG data:", data);
