@@ -239,6 +239,31 @@ function Agents() {
         <div className="elements-container">
           <Row>
             <Col>
+              <h3>{activeAgent}'s Training Time and Accuracy</h3>
+              <div className="shadow-lg rounded">
+                <div className="centered-container">
+                  {activeAgent && activeEpisode ? (
+                    <PerformanceChart
+                      agentNum={activeAgent.split(" ")[1]}
+                      episodeNum={activeEpisode.name.split(" ")[1]}
+                    />
+                  ) : (
+                    <p>Loading Performance Chart...</p>
+                  )}
+                </div>
+              </div>
+            </Col>
+            <Col>
+              <h3>Node Properties</h3>
+              <div className="shadow-lg rounded">
+                <Properties node={selectedNode} />
+              </div>
+            </Col>
+          </Row>
+        </div>
+        <div className="elements-container">
+          <Row>
+            <Col>
               <h3>BackEnd Test</h3>
               <TablesList />
             </Col>
