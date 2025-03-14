@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { MultiDirectedGraph } from "graphology";
 import Sigma from "sigma";
 import { EdgeArrowProgram } from "sigma/rendering";
+import { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
 import sugiyamaLayout from "./dagComps/sugiyamaLayout";
 
 const sigmaStyle = { height: "500px", width: "1000px" };
@@ -27,7 +28,7 @@ const createGraphSugiyama = (graph, data) => {
 
     graph.addNode(index.toString(), {
       label: `Node ${index}`,
-      size: params?.weights ? 15 + params.weights.flat().length : 15,
+      size: params?.weights ? 20 + params.weights.flat().length : 15,
       x: layer * 100,
       y: position * 50,
       color:
@@ -71,7 +72,7 @@ function DAGSugi({ graphData, onNodeClick }) {
       hideLabelsOnMove: false,
       allowInvalidContainer: true,
       labelDensity: 10,
-      edgeProgramClasses: { curve: EdgeArrowProgram },
+      edgeProgramClasses: { curve: EdgeCurvedArrowProgram },
     });
 
     // Handle node click event

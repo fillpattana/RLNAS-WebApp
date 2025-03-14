@@ -126,7 +126,6 @@ function Agents() {
 
   useEffect(() => {
     if (activeAgent) {
-      setIndex(0);
       const agentNum = activeAgent.split(" ")[1];
       fetchEpisodeCount(agentNum);
     }
@@ -134,10 +133,15 @@ function Agents() {
 
   useEffect(() => {
     if (activeAgent && activeEpisode) {
-      setIndex(0);
       const agentNum = activeAgent.split(" ")[1];
       const episodeNum = activeEpisode.name.split(" ")[1];
       fetchIterationCount(agentNum, episodeNum);
+
+      // Fetch the first iteration by default when episodes are set
+      fetchGraphData(agentNum, episodeNum, 1).then((data) => {
+        setGraphData((prevData) => ({ ...prevData, 1: data }));
+        setIndex(0); // Ensure first iteration is selected
+      });
     }
   }, [activeAgent, activeEpisode]);
 
