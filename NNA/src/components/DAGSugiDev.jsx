@@ -8,6 +8,11 @@ import sugiyamaLayout from "./dagComps/sugiyamaLayout";
 const sigmaStyle = { height: "500px", width: "1000px" };
 
 const createGraphSugiyama = (graph, data) => {
+  if (!data || !data.Graph || !data.Graph.nodes || !data.Graph.edges) {
+    console.error("createGraphSugiyama: Invalid graphData.");
+    return;
+  }
+
   if (!data) return;
   console.log(
     "Creating graph with Sugiyama layout for:",
@@ -27,7 +32,7 @@ const createGraphSugiyama = (graph, data) => {
     }
 
     graph.addNode(index.toString(), {
-      label: `Node ${index}`,
+      label: `${type.toUpperCase()}`,
       size: params?.weights ? 20 + params.weights.flat().length : 15,
       x: layer * 100,
       y: position * 50,
