@@ -186,7 +186,7 @@
 // No detailed loggings of whole process.
 
 const topologicalSort = (graphData) => {
-  console.log("beginning TopSort\n");
+  // console.log("beginning TopSort\n");
   const inDegree = new Map(); // Tracks in-degree of each node
   const layerAssignments = new Map(); // Stores the layer assignment for each node
   const queue = [];
@@ -250,7 +250,7 @@ const topologicalSort = (graphData) => {
 };
 
 const barycenterOrdering = (graphData, layerAssignments) => {
-  console.log("beginning BaryCenter");
+  // console.log("beginning BaryCenter");
   const layers = new Map();
   const nodePositions = new Map();
 
