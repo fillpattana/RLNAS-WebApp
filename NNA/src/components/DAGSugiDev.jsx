@@ -6,24 +6,6 @@ import sugiyamaLayout from "./dagComps/sugiyamaLayout";
 
 const sigmaStyle = { height: "500px", width: "1000px" };
 
-const fetchGraphData = async (agent, episode, iteration) => {
-  const endpoint = `http://localhost:3000/api/dagJSON/${agent}/${episode}/${iteration}`;
-  console.log(`Fetching DAG data from: ${endpoint}`);
-
-  try {
-    const response = await fetch(endpoint);
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    const data = await response.json();
-    console.log(
-      `Received JSON DAG for agent: ${agent} episode: ${episode} iteration: ${iteration}`
-    );
-    return data;
-  } catch (error) {
-    console.error("Error fetching DAG data:", error);
-    return null;
-  }
-};
-
 const createGraphSugiyama = (graph, data) => {
   if (!data) return;
   console.log(
@@ -75,25 +57,15 @@ const createGraphSugiyama = (graph, data) => {
   });
 };
 
-function DAGSugi({ agent, episode, iteration, onNodeClick }) {
+function DAGSugi({ graphData, onNodeClick }) {
   const containerRef = useRef(null);
   const sigmaInstanceRef = useRef(null);
-  const [graphData, setGraphData] = useState(null);
 
   useEffect(() => {
-    let isMounted = true;
-    fetchGraphData(agent, episode, iteration).then((data) => {
-      if (isMounted) setGraphData(data);
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, [agent, episode, iteration]);
-
-  useEffect(() => {
-    if (!graphData) return;
+    if (!graphData) return; // Only process if graphData exists
     const graph = new MultiDirectedGraph();
     createGraphSugiyama(graph, graphData);
+
     const renderer = new Sigma(graph, containerRef.current, {
       defaultEdgeType: "curve",
       hideLabelsOnMove: false,
@@ -101,13 +73,81 @@ function DAGSugi({ agent, episode, iteration, onNodeClick }) {
       labelDensity: 10,
       edgeProgramClasses: { curve: EdgeArrowProgram },
     });
-    renderer.on("clickNode", (event) => {
-      const nodeData = graphData.Graph.nodes.find(
-        (n) => n.index.toString() === event.node
-      );
-      if (nodeData) onNodeClick(nodeData);
+
+    // Handle node click event
+    renderer.on(
+      "clickNode",
+      (event) => {
+        const clickedNodeId = event.node;
+        const nodeData = graphData.Graph.nodes.find(
+          (n) => n.index.toString() === clickedNodeId
+        );
+
+        if (!nodeData) {
+          console.error(`Node data not found for ID ${clickedNodeId}`);
+          return;
+        }
+
+        onNodeClick({
+          id: clickedNodeId,
+          type: nodeData.type,
+          activation: nodeData.activation?.type || "none",
+          weights: nodeData.params?.weights || [],
+          biases: nodeData.params?.biases || [],
+        });
+      },
+      { passive: true }
+    );
+
+    // Drag and drop functionality
+    let draggedNode = null;
+    let isDragging = false;
+
+    renderer.on("downNode", (e) => {
+      isDragging = true;
+      draggedNode = e.node;
+      graph.setNodeAttribute(draggedNode, "highlighted", true);
     });
+
+    renderer.getMouseCaptor().on(
+      "mousemovebody",
+      (e) => {
+        if (!isDragging || !draggedNode) return;
+
+        const pos = renderer.viewportToGraph(e);
+
+        graph.setNodeAttribute(draggedNode, "x", pos.x);
+        graph.setNodeAttribute(draggedNode, "y", pos.y);
+
+        e.preventSigmaDefault();
+        e.original.preventDefault();
+        e.original.stopPropagation();
+      },
+      { passive: true }
+    );
+
+    renderer.getMouseCaptor().on("mouseup", () => {
+      if (draggedNode) {
+        graph.removeNodeAttribute(draggedNode, "highlighted");
+      }
+      isDragging = false;
+      draggedNode = null;
+    });
+
+    renderer.getMouseCaptor().on("mousedown", () => {
+      if (!renderer.getCustomBBox()) renderer.setCustomBBox(renderer.getBBox());
+    });
+
+    renderer.on("enterNode", () => {
+      containerRef.current.style.cursor = "pointer";
+    });
+
+    renderer.on("leaveNode", () => {
+      containerRef.current.style.cursor = "default";
+    });
+
     sigmaInstanceRef.current = renderer;
+
     return () => renderer.kill();
   }, [graphData, onNodeClick]);
 

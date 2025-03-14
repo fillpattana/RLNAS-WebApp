@@ -22,6 +22,7 @@ function Agents() {
   const [iterationCount, setIterationCount] = useState(0);
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
+  const [graphData, setGraphData] = useState({});
   const timestamp = "2025-01-02 10:10:10";
   const ws = useRef(null); // WebSocket reference
 
@@ -103,6 +104,22 @@ function Agents() {
     }
   };
 
+  const fetchGraphData = async (agentNum, episodeNum, iterationNum) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/dagJSON/${encodeURIComponent(
+          agentNum
+        )}/${encodeURIComponent(episodeNum)}/${encodeURIComponent(
+          iterationNum
+        )}`
+      );
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching DAG data:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     fetchAgentCount();
   }, [timestamp]);
@@ -126,11 +143,22 @@ function Agents() {
 
   const handleAgentChange = (agentId) => setActiveAgent(agentId);
   const handleEpisodeClick = (episode) => setActiveEpisode(episode);
-  const handleNextIteration = (selectedIndex) => setIndex(selectedIndex);
   const handleNodeClick = useCallback((nodeData) => {
     selectedNodeRef.current = nodeData;
     setSelectedNode(nodeData);
   }, []);
+
+  const handleNextIteration = async (selectedIndex) => {
+    setIndex(selectedIndex);
+    const agentNum = activeAgent.split(" ")[1];
+    const episodeNum = activeEpisode.name.split(" ")[1];
+    const iterationNum = selectedIndex + 1;
+
+    if (!graphData[iterationNum]) {
+      const data = await fetchGraphData(agentNum, episodeNum, iterationNum);
+      setGraphData((prevData) => ({ ...prevData, [iterationNum]: data }));
+    }
+  };
 
   useEffect(() => {
     ws.current = new WebSocket("ws://localhost:3000");
@@ -195,7 +223,7 @@ function Agents() {
                       fade
                       interval={null}
                       activeIndex={index}
-                      onSelect={(selectedIndex) => setIndex(selectedIndex)}
+                      onSelect={handleNextIteration}
                       data-bs-theme="dark"
                     >
                       {Array.from({ length: iterationCount }, (_, i) => (
@@ -206,10 +234,11 @@ function Agents() {
                             onAgentChange={handleAgentChange}
                           />
                           <DAGSugiDev
+                            onNodeClick={handleNodeClick}
                             agent={activeAgent.split(" ")[1]}
                             episode={activeEpisode.name.split(" ")[1]}
                             iteration={i + 1}
-                            onNodeClick={handleNodeClick}
+                            graphData={graphData[i + 1]}
                           />
                           <Carousel.Caption>
                             <h5>{activeAgent}</h5>
@@ -221,10 +250,7 @@ function Agents() {
                       ))}
                     </Carousel>
                   ) : (
-                    <p>
-                      The reinforcement learning running session selected does
-                      not exist
-                    </p>
+                    <p>The reinforcement learning session does not exist</p>
                   )}
                 </div>
               </div>
