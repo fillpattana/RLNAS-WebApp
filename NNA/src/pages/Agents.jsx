@@ -205,17 +205,12 @@ function Agents() {
                             activeAgent={activeAgent}
                             onAgentChange={handleAgentChange}
                           />
-                          <DAGTest
+                          <DAGSugiDev
+                            agent={activeAgent.split(" ")[1]}
+                            episode={activeEpisode.name.split(" ")[1]}
                             iteration={i + 1}
-                            agent={activeAgent}
-                            episode={activeEpisode?.name}
-                          />
-                          {/* <DAGSugiDev
-                            agentNum={activeAgent.split(" ")[1]}
-                            episodeNum={activeEpisode.name.split(" ")[1]}
-                            iterationNum={index + 1}
                             onNodeClick={handleNodeClick}
-                          /> */}
+                          />
                           <Carousel.Caption>
                             <h5>{activeAgent}</h5>
                             <p>
