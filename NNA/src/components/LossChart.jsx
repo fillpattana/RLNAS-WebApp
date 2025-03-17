@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -10,51 +10,54 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  {
-    epoch: "1",
-    loss: 2400,
-  },
-  {
-    epoch: "2",
-    loss: 1398,
-  },
-  {
-    epoch: "3",
-    loss: 9800,
-  },
-  {
-    epoch: "4",
-    loss: 3908,
-  },
-  {
-    epoch: "5",
-    loss: 4800,
-  },
-  {
-    epoch: "6",
-    loss: 3800,
-  },
-  {
-    epoch: "7",
-    loss: 4300,
-  },
-];
+const timestamp = "2025-01-02 10:10:10";
 
 function LossChart() {
-  data.iterationNumber?.map((iteration, index) => ({
-    iterationNumber: iteration,
-    accuracy: trainingData.accuracy[index],
-    trainingTime: trainingData.trainingTime[index],
-  })) || [];
-  console.log("Chart Re-rendered");
+  const [chartData, setChartData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("Fetching Loss Metrics...");
+
+        const response = await fetch(
+          `http://localhost:3000/api/LossMetric/${encodeURIComponent(
+            timestamp
+          )}`
+        );
+        if (!response.ok) {
+          throw new Error(
+            `Performance chart is receiving timestamp=${timestamp}`
+          );
+        }
+        const result = await response.json();
+
+        // Transform backend data to the format required by the chart
+        const transformedData = result.map((item) => ({
+          loss: parseFloat(item.loss),
+          epoch: parseInt(item.epoch, 10),
+        }));
+
+        setChartData(transformedData);
+
+        console.log(
+          `Performance Chart data fetched for runtimestamp: ${timestamp}`,
+          transformedData
+        );
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    };
+
+    fetchData();
+  }, [timestamp]);
 
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart
         width={500}
         height={300}
-        data={data}
+        data={chartData}
         margin={{
           top: 5,
           right: 30,
@@ -81,7 +84,6 @@ function LossChart() {
           stroke="#8884d8"
           activeDot={{ r: 8 }}
         />
-        {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
       </LineChart>
     </ResponsiveContainer>
   );

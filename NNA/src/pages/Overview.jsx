@@ -1,5 +1,5 @@
 import LossChart from "../components/LossChart";
-import PerformanceChart from "../components/PerformanceChart";
+import OverallPerformanceChart from "../components/OverallPerformanceChart";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -18,7 +18,7 @@ function Overview() {
           <div className="elements-container">
             <Col>
               <h3> Overall Training Time and Accuracy of All Agents </h3>
-              <PerformanceChart />
+              <OverallPerformanceChart />
             </Col>
           </div>
         </Row>
