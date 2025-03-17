@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
-import PerformanceChart from "../components/PerformanceChart";
+import AgentsPerformanceChart from "../components/AgentsPerformanceChart";
 import DAGSugi from "../components/DAGSugi";
 import DAGSugiDev from "../components/DAGSugiDev";
 import AgentsTab from "../components/dagComps/AgentSelect";
@@ -268,7 +268,7 @@ function Agents() {
               <div className="shadow-lg rounded">
                 <div className="centered-container">
                   {activeAgent && activeEpisode ? (
-                    <PerformanceChart
+                    <AgentsPerformanceChart
                       agentNum={activeAgent.split(" ")[1]}
                       episodeNum={activeEpisode.name.split(" ")[1]}
                     />

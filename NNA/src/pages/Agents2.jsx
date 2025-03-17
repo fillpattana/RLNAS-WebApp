@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
 // Components
-import PerformanceChart from "../components/PerformanceChart";
+import AgentsPerformanceChart from "../components/AgentsPerformanceChart";
 import DAGSugi from "../components/DAGSugi";
 import AgentsTab from "../components/dagComps/AgentSelect";
 import EpisodeList from "../components/dagComps/EpisodeSelect";
@@ -203,7 +203,7 @@ function Agents() {
               </h3>
               <div className="shadow-lg rounded">
                 <div className="centered-container">
-                  <PerformanceChart agentNum={2} episodeNum={1} />
+                  <AgentsPerformanceChart agentNum={2} episodeNum={1} />
                 </div>
               </div>
             </Col>

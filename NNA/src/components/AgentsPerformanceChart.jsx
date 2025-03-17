@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function PerformanceChart({ agentNum, episodeNum }) {
+function AgentsPerformanceChart({ agentNum, episodeNum }) {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
@@ -111,4 +111,4 @@ function PerformanceChart({ agentNum, episodeNum }) {
   );
 }
 
-export default PerformanceChart;
+export default AgentsPerformanceChart;
