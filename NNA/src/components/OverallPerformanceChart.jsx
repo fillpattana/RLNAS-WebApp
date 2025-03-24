@@ -10,25 +10,25 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function PerformanceChart({ agentNum, episodeNum }) {
+const timestamp = "2025-01-02 10:10:10";
+
+function OverviewIterationChart() {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("Fetching Iteration Metrics...");
+        console.log("Fetching Iteration Metrics for timestamp:", timestamp);
 
         const response = await fetch(
-          `http://localhost:3000/api/IterationMetric?agentNum=${agentNum}&episodeNum=${episodeNum}`
+          `http://localhost:3000/api/OverviewIterationMetric/${timestamp}`
         );
         if (!response.ok) {
-          throw new Error(
-            `Performance chart is receiving agentNum=${agentNum}&episodeNum=${episodeNum}`
-          );
+          throw new Error(`Error fetching data for timestamp: ${timestamp}`);
         }
         const result = await response.json();
 
-        // Transform backend data to the format required by the chart
+        // Transform backend data to match chart format
         const transformedData = result.map((item, index) => ({
           iterationNumber: index + 1, // Use index as iteration number
           accuracy: parseFloat(item.accuracy),
@@ -38,7 +38,7 @@ function PerformanceChart({ agentNum, episodeNum }) {
         setChartData(transformedData);
 
         console.log(
-          `Performance Chart data fetched for AgentNum ${agentNum}, EpisodeNum ${episodeNum}:`,
+          `Performance Chart data fetched for Timestamp ${timestamp}:`,
           transformedData
         );
       } catch (error) {
@@ -47,7 +47,7 @@ function PerformanceChart({ agentNum, episodeNum }) {
     };
 
     fetchData();
-  }, [agentNum, episodeNum]);
+  }, [timestamp]);
 
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -111,4 +111,4 @@ function PerformanceChart({ agentNum, episodeNum }) {
   );
 }
 
-export default PerformanceChart;
+export default OverviewIterationChart;

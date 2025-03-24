@@ -3,8 +3,9 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
-import PerformanceChart from "../components/PerformanceChart";
+import AgentsPerformanceChart from "../components/AgentsPerformanceChart";
 import DAGSugi from "../components/DAGSugi";
+import DAGSugiDev from "../components/DAGSugiDev";
 import AgentsTab from "../components/dagComps/AgentSelect";
 import EpisodeList from "../components/dagComps/EpisodeSelect";
 import "../styles/Agents.css";
@@ -21,121 +22,187 @@ function Agents() {
   const [iterationCount, setIterationCount] = useState(0);
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
+  const [graphData, setGraphData] = useState({});
   const timestamp = "2025-01-02 10:10:10";
+  const ws = useRef(null); // WebSocket reference
 
-  //get total number of agents for the running session
-  useEffect(() => {
-    const fetchAgentCount = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/api/AgentCount/${encodeURIComponent(
-            timestamp
-          )}`
+  const fetchAgentCount = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/AgentCount/${encodeURIComponent(timestamp)}`
+      );
+      const data = await response.json();
+
+      if (data.totalagents) {
+        const totalagents = parseInt(data.totalagents, 10);
+        const generatedAgents = Array.from({ length: totalagents }, (_, i) => ({
+          id: `Agent ${i + 1}`,
+          name: `Agent ${i + 1}`,
+        }));
+
+        setAgents(generatedAgents);
+        setActiveAgent((prev) =>
+          generatedAgents.some((agent) => agent.id === prev)
+            ? prev
+            : generatedAgents[0]?.id || null
         );
-        const data = await response.json();
-
-        if (data.totalagents) {
-          const totalAgents = parseInt(data.totalagents, 10);
-          const generatedAgents = Array.from(
-            { length: totalAgents },
-            (_, i) => ({
-              id: `Agent ${i + 1}`,
-              name: `Agent ${i + 1}`,
-            })
-          );
-
-          setAgents(generatedAgents);
-          setActiveAgent(generatedAgents[0]?.id || null);
-        } else {
-          setAgents([]);
-          setActiveAgent(null);
-        }
-      } catch (error) {
-        console.error("Error fetching agent count:", error);
+      } else {
+        setAgents([]);
+        setActiveAgent(null);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching agent count:", error);
+    }
+  };
 
+  const fetchEpisodeCount = async (agentNum) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/EpisodeCount/${encodeURIComponent(agentNum)}`
+      );
+      const data = await response.json();
+
+      if (data.totalepisodes) {
+        const totalepisodes = parseInt(data.totalepisodes, 10);
+        const generatedEpisodes = Array.from(
+          { length: totalepisodes },
+          (_, i) => ({
+            name: `Episode ${i + 1}`,
+          })
+        );
+        setEpisodes(generatedEpisodes);
+        setActiveEpisode((prev) =>
+          generatedEpisodes.some((ep) => ep.name === prev?.name)
+            ? prev
+            : generatedEpisodes[0] || null
+        );
+      } else {
+        setEpisodes([]);
+        setActiveEpisode(null);
+      }
+    } catch (error) {
+      console.error("Error fetching episode count:", error);
+    }
+  };
+
+  const fetchIterationCount = async (agentNum, episodeNum) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/IterationCount/${encodeURIComponent(
+          agentNum
+        )}/${encodeURIComponent(episodeNum)}`
+      );
+      const data = await response.json();
+
+      if (data.totaliterations) {
+        setIterationCount(parseInt(data.totaliterations, 10));
+      } else {
+        setIterationCount(0);
+      }
+    } catch (error) {
+      console.error("Error fetching iteration count:", error);
+    }
+  };
+
+  const fetchGraphData = async (agentNum, episodeNum, iterationNum) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/dagJSON/${encodeURIComponent(
+          agentNum
+        )}/${encodeURIComponent(episodeNum)}/${encodeURIComponent(
+          iterationNum
+        )}`
+      );
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching DAG data:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
     fetchAgentCount();
   }, [timestamp]);
 
-  //gets total number of episodes for the active agent
   useEffect(() => {
     if (activeAgent) {
-      setIndex(0); // Reset iteration index
-      const agentNum = activeAgent.split(" ")[1]; // Extract number from "Agent 1"
-
-      const fetchEpisodeCount = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:3000/api/EpisodeCount/${encodeURIComponent(
-              agentNum
-            )}`
-          );
-          const data = await response.json();
-
-          if (data.totalepisodes) {
-            const totalEpisodes = parseInt(data.totalepisodes, 10);
-            const generatedEpisodes = Array.from(
-              { length: totalEpisodes },
-              (_, i) => ({
-                name: `Episode ${i + 1}`,
-              })
-            );
-            setEpisodes(generatedEpisodes);
-            setActiveEpisode(generatedEpisodes[0] || null);
-          } else {
-            setEpisodes([]);
-            setActiveEpisode(null);
-          }
-        } catch (error) {
-          console.error("Error fetching episode count:", error);
-        }
-      };
-
-      fetchEpisodeCount();
+      const agentNum = activeAgent.split(" ")[1];
+      fetchEpisodeCount(agentNum);
     }
   }, [activeAgent]);
 
-  //gets total number of iterations for the active agent and episode
   useEffect(() => {
     if (activeAgent && activeEpisode) {
-      setIndex(0); // Reset iteration index
-      const agentNum = activeAgent.split(" ")[1]; // Get agent number
-      const episodeNum = activeEpisode.name.split(" ")[1]; // Get episode number
+      const agentNum = activeAgent.split(" ")[1];
+      const episodeNum = activeEpisode.name.split(" ")[1];
+      fetchIterationCount(agentNum, episodeNum);
 
-      console.log("Fetching Iterations for agentNum:", agentNum);
-      console.log("Fetching Iterations for episodeNum:", episodeNum);
-
-      const fetchIterationCount = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:3000/api/IterationCount/${encodeURIComponent(
-              agentNum
-            )}/${encodeURIComponent(episodeNum)}`
-          );
-          const data = await response.json();
-
-          if (data.totaliterations) {
-            setIterationCount(parseInt(data.totaliterations, 10));
-          } else {
-            setIterationCount(0);
-          }
-        } catch (error) {
-          console.error("Error fetching iteration count:", error);
-        }
-      };
-
-      fetchIterationCount();
+      // Fetch the first iteration by default when episodes are set
+      fetchGraphData(agentNum, episodeNum, 1).then((data) => {
+        setGraphData((prevData) => ({ ...prevData, 1: data }));
+        setIndex(0); // Ensure first iteration is selected
+      });
     }
   }, [activeAgent, activeEpisode]);
 
   const handleAgentChange = (agentId) => setActiveAgent(agentId);
   const handleEpisodeClick = (episode) => setActiveEpisode(episode);
-  const handleNextIteration = (selectedIndex) => setIndex(selectedIndex);
   const handleNodeClick = useCallback((nodeData) => {
     selectedNodeRef.current = nodeData;
     setSelectedNode(nodeData);
   }, []);
+
+  const handleNextIteration = async (selectedIndex) => {
+    setIndex(selectedIndex);
+    const agentNum = activeAgent.split(" ")[1];
+    const episodeNum = activeEpisode.name.split(" ")[1];
+    const iterationNum = selectedIndex + 1;
+
+    if (!graphData[iterationNum]) {
+      const data = await fetchGraphData(agentNum, episodeNum, iterationNum);
+      setGraphData((prevData) => ({ ...prevData, [iterationNum]: data }));
+    }
+  };
+
+  useEffect(() => {
+    ws.current = new WebSocket("ws://localhost:3000");
+
+    ws.current.onopen = () => console.log("WebSocket connected!");
+    ws.current.onmessage = (event) => {
+      try {
+        const realTimeData = JSON.parse(event.data);
+        console.log("Received WebSocket update:", realTimeData);
+
+        if (realTimeData.graphid) {
+          fetchAgentCount();
+          if (activeAgent) {
+            const agentNum = activeAgent.split(" ")[1];
+            fetchEpisodeCount(agentNum);
+
+            if (activeEpisode) {
+              const episodeNum = activeEpisode.name.split(" ")[1];
+              fetchIterationCount(agentNum, episodeNum);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
+      }
+    };
+
+    ws.current.onclose = () => {
+      console.log("WebSocket disconnected. Attempting to reconnect...");
+      setTimeout(() => {
+        ws.current = new WebSocket("ws://localhost:3000");
+      }, 3000);
+    };
+
+    ws.current.onerror = (error) => console.error("WebSocket error:", error);
+
+    return () => {
+      if (ws.current) ws.current.close();
+    };
+  }, [activeAgent, activeEpisode]);
 
   return (
     <div>
@@ -160,7 +227,7 @@ function Agents() {
                       fade
                       interval={null}
                       activeIndex={index}
-                      onSelect={(selectedIndex) => setIndex(selectedIndex)}
+                      onSelect={handleNextIteration}
                       data-bs-theme="dark"
                     >
                       {Array.from({ length: iterationCount }, (_, i) => (
@@ -170,12 +237,13 @@ function Agents() {
                             activeAgent={activeAgent}
                             onAgentChange={handleAgentChange}
                           />
-                          {/* <DAGTest
+                          <DAGSugiDev
+                            onNodeClick={handleNodeClick}
+                            agent={activeAgent.split(" ")[1]}
+                            episode={activeEpisode.name.split(" ")[1]}
                             iteration={i + 1}
-                            agent={activeAgent}
-                            episode={activeEpisode?.name}
-                          /> */}
-                          <DAGSugi onNodeClick={handleNodeClick} />
+                            graphData={graphData[i + 1]}
+                          />
                           <Carousel.Caption>
                             <h5>{activeAgent}</h5>
                             <p>
@@ -186,10 +254,7 @@ function Agents() {
                       ))}
                     </Carousel>
                   ) : (
-                    <p>
-                      The reinforcement learning running session selected does
-                      not exist
-                    </p>
+                    <p>The reinforcement learning session does not exist</p>
                   )}
                 </div>
               </div>
@@ -203,7 +268,7 @@ function Agents() {
               <div className="shadow-lg rounded">
                 <div className="centered-container">
                   {activeAgent && activeEpisode ? (
-                    <PerformanceChart
+                    <AgentsPerformanceChart
                       agentNum={activeAgent.split(" ")[1]}
                       episodeNum={activeEpisode.name.split(" ")[1]}
                     />
@@ -221,18 +286,14 @@ function Agents() {
             </Col>
           </Row>
         </div>
-        <div className="elements-container">
+        {/* <div className="elements-container">
           <Row>
             <Col>
               <h3>BackEnd Test</h3>
-              <div className="shadow-lg rounded">
-                <div className="centered-container">
-                  <TablesList />
-                </div>
-              </div>
+              <TablesList />
             </Col>
           </Row>
-        </div>
+        </div> */}
       </Container>
     </div>
   );

@@ -1,8 +1,8 @@
 {
   "Graph": {
     "edges": {
-      "senders": [0, 1, 2, 0, 4, 5, 4, 6, 3, 2, 7, 3, 8, 3, 10, 9, 10],
-      "receivers": [1, 2, 3, 4, 5, 3, 6, 2, 7, 7, 8, 8, 9, 10, 9, 11, 11]
+      "senders": [0, 1, 2, 0, 4, 5, 4, 6, 3, 2, 7, 3, 8, 3],
+      "receivers": [1, 2, 3, 4, 5, 3, 6, 2, 7, 7, 8, 8, 9, 9]
     },
     "nodes": [
       {
@@ -143,34 +143,6 @@
         },
         "activation": {
           "type": "relu"
-        }
-      },
-      {
-        "type": "dense",
-        "index": 10,
-        "params": {
-          "biases": [0.2, 0.4],
-          "weights": [
-            [0.5, 0.32, 0.1],
-            [0.12, 0.42, 0.33]
-          ]
-        },
-        "activation": {
-          "type": "sigmoid"
-        }
-      },
-      {
-        "type": "dense",
-        "index": 11,
-        "params": {
-          "biases": [0.12, 0.22],
-          "weights": [
-            [0.75, 0.12],
-            [0.43, 0.56]
-          ]
-        },
-        "activation": {
-          "type": "tanh"
         }
       },
       {
