@@ -44,7 +44,7 @@ function OverallAccuracyChart() {
         );
         if (!response.ok) {
           throw new Error(
-            `OverviewAccMetric chart is receiving timestamp=${timestamp}`
+            `OverviewAccMetric end point is receiving timestamp=${timestamp}`
           );
         }
         const result = await response.json();
