@@ -264,6 +264,12 @@ function Agents() {
         <div className="elements-container">
           <Row>
             <Col>
+              <h3>Node Properties</h3>
+              <div className="shadow-lg rounded">
+                <Properties node={selectedNode} />
+              </div>
+            </Col>
+            <Col>
               <h3>{activeAgent}'s Training Time and Accuracy</h3>
               <div className="shadow-lg rounded">
                 <div className="centered-container">
@@ -278,22 +284,16 @@ function Agents() {
                 </div>
               </div>
             </Col>
-            <Col>
-              <h3>Node Properties</h3>
-              <div className="shadow-lg rounded">
-                <Properties node={selectedNode} />
-              </div>
-            </Col>
           </Row>
         </div>
-        {/* <div className="elements-container">
+        <div className="elements-container">
           <Row>
             <Col>
               <h3>BackEnd Test</h3>
               <TablesList />
             </Col>
           </Row>
-        </div> */}
+        </div>
       </Container>
     </div>
   );
