@@ -32,7 +32,7 @@ function AgentsPerformanceChart({ agentNum, episodeNum }) {
         const transformedData = result.map((item, index) => ({
           iterationNumber: index + 1, // Use index as iteration number
           accuracy: parseFloat(item.accuracy),
-          trainingtime: parseInt(item.trainingtime, 10),
+          flops: parseInt(item.trainingtime, 10),
         }));
 
         setChartData(transformedData);
@@ -85,7 +85,7 @@ function AgentsPerformanceChart({ agentNum, episodeNum }) {
           orientation="right"
           tick={{ fill: "#82ca9d" }}
           label={{
-            value: "Training Time",
+            value: "FLOPs",
             angle: 90,
             position: "insideRight",
             stroke: "#82ca9d",
@@ -103,7 +103,7 @@ function AgentsPerformanceChart({ agentNum, episodeNum }) {
         <Line
           yAxisId="right"
           type="monotone"
-          dataKey="trainingtime"
+          dataKey="flops"
           stroke="#82ca9d"
         />
       </LineChart>
