@@ -3,6 +3,7 @@ import OverallAccuracyChart from "../components/OverallAccuracyChart";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import OverallFlopChart from "../components/OverallFlopChart";
 
 function Overview() {
   return (
@@ -17,8 +18,14 @@ function Overview() {
           </div>
           <div className="elements-container">
             <Col>
-              <h3> Overall Training Time and Accuracy of All Agents </h3>
+              <h3> Overall Accuracy of All Agents </h3>
               <OverallAccuracyChart />
+            </Col>
+          </div>
+          <div className="elements-container">
+            <Col>
+              <h3> Overall Flop Rate of All Agents </h3>
+              <OverallFlopChart />
             </Col>
           </div>
         </Row>
