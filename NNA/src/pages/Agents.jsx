@@ -23,7 +23,7 @@ function Agents() {
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
   const [graphData, setGraphData] = useState({});
-  const timestamp = "2025-01-02 10:10:10";
+  const timestamp = "2025-03-29 03:17:22.329576";
   const ws = useRef(null); // WebSocket reference
 
   const fetchAgentCount = async () => {
@@ -31,13 +31,14 @@ function Agents() {
       const response = await fetch(
         `http://localhost:3000/api/AgentCount/${encodeURIComponent(timestamp)}`
       );
+      
       const data = await response.json();
 
       if (data.totalagents) {
         const totalagents = parseInt(data.totalagents, 10);
         const generatedAgents = Array.from({ length: totalagents }, (_, i) => ({
-          id: `Agent ${i + 1}`,
-          name: `Agent ${i + 1}`,
+          id: `Agent ${i}`,
+          name: `Agent ${i}`,
         }));
 
         setAgents(generatedAgents);
@@ -67,7 +68,7 @@ function Agents() {
         const generatedEpisodes = Array.from(
           { length: totalepisodes },
           (_, i) => ({
-            name: `Episode ${i + 1}`,
+            name: `Episode ${i}`,
           })
         );
         setEpisodes(generatedEpisodes);
@@ -107,7 +108,7 @@ function Agents() {
   const fetchGraphData = async (agentNum, episodeNum, iterationNum) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/dagJSON/${encodeURIComponent(
+        `http://localhost:3000/api/dagJSON/${encodeURIComponent(timestamp)}/${encodeURIComponent(
           agentNum
         )}/${encodeURIComponent(episodeNum)}/${encodeURIComponent(
           iterationNum
@@ -137,9 +138,11 @@ function Agents() {
       const episodeNum = activeEpisode.name.split(" ")[1];
       fetchIterationCount(agentNum, episodeNum);
 
+      setGraphData({}); // Reset graph data to avoid stale cache
+
       // Fetch the first iteration by default when episodes are set
-      fetchGraphData(agentNum, episodeNum, 1).then((data) => {
-        setGraphData((prevData) => ({ ...prevData, 1: data }));
+      fetchGraphData(agentNum, episodeNum, 0).then((data) => {
+        setGraphData((prevData) => ({ ...prevData, 0: data }));
         setIndex(0); // Ensure first iteration is selected
       });
     }
@@ -156,7 +159,7 @@ function Agents() {
     setIndex(selectedIndex);
     const agentNum = activeAgent.split(" ")[1];
     const episodeNum = activeEpisode.name.split(" ")[1];
-    const iterationNum = selectedIndex + 1;
+    const iterationNum = selectedIndex;
 
     if (!graphData[iterationNum]) {
       const data = await fetchGraphData(agentNum, episodeNum, iterationNum);
@@ -241,13 +244,13 @@ function Agents() {
                             onNodeClick={handleNodeClick}
                             agent={activeAgent.split(" ")[1]}
                             episode={activeEpisode.name.split(" ")[1]}
-                            iteration={i + 1}
-                            graphData={graphData[i + 1]}
+                            iteration={i}
+                            graphData={graphData[i]}
                           />
                           <Carousel.Caption>
                             <h5>{activeAgent}</h5>
                             <p>
-                              {activeEpisode?.name} - Iteration {i + 1}
+                              {activeEpisode?.name} - Iteration {i}
                             </p>
                           </Carousel.Caption>
                         </Carousel.Item>
@@ -286,14 +289,14 @@ function Agents() {
             </Col>
           </Row>
         </div>
-        <div className="elements-container">
+        {/* <div className="elements-container">
           <Row>
             <Col>
               <h3>BackEnd Test</h3>
-              <TablesList />
+              <TablesList /> 
             </Col>
           </Row>
-        </div>
+        </div> */}
       </Container>
     </div>
   );

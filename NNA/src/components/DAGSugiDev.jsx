@@ -33,7 +33,9 @@ const createGraphSugiyama = (graph, data) => {
 
     graph.addNode(index.toString(), {
       label: `${type.toUpperCase()}`,
-      size: params?.weights ? 20 + params.weights.flat().length : 15,
+      // size: params?.weights ? 20 + params.weights.flat().length : 15,
+      // size: 10 + (params.numofnodes * (30/100)),
+      size: 20,
       x: layer * 100,
       y: position * 50,
       color:
