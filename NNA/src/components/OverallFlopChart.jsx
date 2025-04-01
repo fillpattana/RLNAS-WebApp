@@ -118,7 +118,7 @@ function OverallFlopChart() {
             position: "insideLeft",
             stroke: "#8884d8",
           }}
-          domain={[0, 101]}
+          domain={[0, 100]}
         />
         <Tooltip />
         <Legend layout="horizontal" verticalAlign="top" align="center" />
