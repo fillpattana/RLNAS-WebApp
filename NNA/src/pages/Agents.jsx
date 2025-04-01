@@ -23,7 +23,7 @@ function Agents() {
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
   const [graphData, setGraphData] = useState({});
-  const timestamp = "2025-01-02 10:10:10";
+  const timestamp = "2025-03-29 03:17:22.329576";
   const ws = useRef(null); // WebSocket reference
 
   const fetchAgentCount = async () => {
@@ -31,6 +31,7 @@ function Agents() {
       const response = await fetch(
         `http://localhost:3000/api/AgentCount/${encodeURIComponent(timestamp)}`
       );
+      
       const data = await response.json();
 
       if (data.totalagents) {
@@ -107,7 +108,7 @@ function Agents() {
   const fetchGraphData = async (agentNum, episodeNum, iterationNum) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/dagJSON/${encodeURIComponent(
+        `http://localhost:3000/api/dagJSON/${encodeURIComponent(timestamp)}/${encodeURIComponent(
           agentNum
         )}/${encodeURIComponent(episodeNum)}/${encodeURIComponent(
           iterationNum
@@ -290,7 +291,7 @@ function Agents() {
           <Row>
             <Col>
               <h3>BackEnd Test</h3>
-              <TablesList />
+              {/* <TablesList /> */}
             </Col>
           </Row>
         </div>
