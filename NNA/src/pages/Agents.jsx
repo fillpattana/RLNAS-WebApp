@@ -37,8 +37,8 @@ function Agents() {
       if (data.totalagents) {
         const totalagents = parseInt(data.totalagents, 10);
         const generatedAgents = Array.from({ length: totalagents }, (_, i) => ({
-          id: `Agent ${i + 1}`,
-          name: `Agent ${i + 1}`,
+          id: `Agent ${i}`,
+          name: `Agent ${i}`,
         }));
 
         setAgents(generatedAgents);
@@ -68,7 +68,7 @@ function Agents() {
         const generatedEpisodes = Array.from(
           { length: totalepisodes },
           (_, i) => ({
-            name: `Episode ${i + 1}`,
+            name: `Episode ${i}`,
           })
         );
         setEpisodes(generatedEpisodes);
@@ -138,9 +138,11 @@ function Agents() {
       const episodeNum = activeEpisode.name.split(" ")[1];
       fetchIterationCount(agentNum, episodeNum);
 
+      setGraphData({}); // Reset graph data to avoid stale cache
+
       // Fetch the first iteration by default when episodes are set
-      fetchGraphData(agentNum, episodeNum, 1).then((data) => {
-        setGraphData((prevData) => ({ ...prevData, 1: data }));
+      fetchGraphData(agentNum, episodeNum, 0).then((data) => {
+        setGraphData((prevData) => ({ ...prevData, 0: data }));
         setIndex(0); // Ensure first iteration is selected
       });
     }
@@ -157,7 +159,7 @@ function Agents() {
     setIndex(selectedIndex);
     const agentNum = activeAgent.split(" ")[1];
     const episodeNum = activeEpisode.name.split(" ")[1];
-    const iterationNum = selectedIndex + 1;
+    const iterationNum = selectedIndex;
 
     if (!graphData[iterationNum]) {
       const data = await fetchGraphData(agentNum, episodeNum, iterationNum);
@@ -242,13 +244,13 @@ function Agents() {
                             onNodeClick={handleNodeClick}
                             agent={activeAgent.split(" ")[1]}
                             episode={activeEpisode.name.split(" ")[1]}
-                            iteration={i + 1}
-                            graphData={graphData[i + 1]}
+                            iteration={i}
+                            graphData={graphData[i]}
                           />
                           <Carousel.Caption>
                             <h5>{activeAgent}</h5>
                             <p>
-                              {activeEpisode?.name} - Iteration {i + 1}
+                              {activeEpisode?.name} - Iteration {i}
                             </p>
                           </Carousel.Caption>
                         </Carousel.Item>
