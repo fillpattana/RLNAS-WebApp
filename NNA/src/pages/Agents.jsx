@@ -85,7 +85,7 @@ function Agents() {
       console.error("Error fetching episode count:", error);
     }
   };
-
+//
   const fetchIterationCount = async (agentNum, episodeNum) => {
     try {
       const response = await fetch(
