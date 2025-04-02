@@ -12,6 +12,7 @@ import "../styles/Agents.css";
 import Properties from "../components/Properties";
 import TablesList from "../BackendTest/TablesList";
 import DAGTest from "../components/DAGTest";
+import { useLocation } from "react-router-dom";
 
 function Agents() {
   const [agents, setAgents] = useState([]);
@@ -23,7 +24,10 @@ function Agents() {
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
   const [graphData, setGraphData] = useState({});
-  const timestamp = "2025-03-29 03:17:22.329576";
+  // const timestamp = "2025-04-02 08:57:35.174414";
+  const location = useLocation();
+  const timestamp =
+    location.state?.runtimestamp || "wrong timestamp being passed by home"; // Fallback if null
   const ws = useRef(null); // WebSocket reference
 
   const fetchAgentCount = async () => {
@@ -31,14 +35,14 @@ function Agents() {
       const response = await fetch(
         `http://localhost:3000/api/AgentCount/${encodeURIComponent(timestamp)}`
       );
-      
+
       const data = await response.json();
 
       if (data.totalagents) {
         const totalagents = parseInt(data.totalagents, 10);
         const generatedAgents = Array.from({ length: totalagents }, (_, i) => ({
-          id: `Agent ${i}`,
-          name: `Agent ${i}`,
+          id: `Agent ${i + 1}`,
+          name: `Agent ${i + 1}`,
         }));
 
         setAgents(generatedAgents);
@@ -68,7 +72,7 @@ function Agents() {
         const generatedEpisodes = Array.from(
           { length: totalepisodes },
           (_, i) => ({
-            name: `Episode ${i}`,
+            name: `Episode ${i + 1}`,
           })
         );
         setEpisodes(generatedEpisodes);
@@ -108,11 +112,11 @@ function Agents() {
   const fetchGraphData = async (agentNum, episodeNum, iterationNum) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/dagJSON/${encodeURIComponent(timestamp)}/${encodeURIComponent(
-          agentNum
-        )}/${encodeURIComponent(episodeNum)}/${encodeURIComponent(
-          iterationNum
-        )}`
+        `http://localhost:3000/api/dagJSON/${encodeURIComponent(
+          timestamp
+        )}/${encodeURIComponent(agentNum)}/${encodeURIComponent(
+          episodeNum
+        )}/${encodeURIComponent(iterationNum)}`
       );
       return await response.json();
     } catch (error) {
@@ -141,7 +145,7 @@ function Agents() {
       setGraphData({}); // Reset graph data to avoid stale cache
 
       // Fetch the first iteration by default when episodes are set
-      fetchGraphData(agentNum, episodeNum, 0).then((data) => {
+      fetchGraphData(agentNum, episodeNum, 1).then((data) => {
         setGraphData((prevData) => ({ ...prevData, 0: data }));
         setIndex(0); // Ensure first iteration is selected
       });
@@ -244,13 +248,13 @@ function Agents() {
                             onNodeClick={handleNodeClick}
                             agent={activeAgent.split(" ")[1]}
                             episode={activeEpisode.name.split(" ")[1]}
-                            iteration={i}
+                            iteration={i + 1}
                             graphData={graphData[i]}
                           />
                           <Carousel.Caption>
                             <h5>{activeAgent}</h5>
                             <p>
-                              {activeEpisode?.name} - Iteration {i}
+                              {activeEpisode?.name} - Iteration {i + 1}
                             </p>
                           </Carousel.Caption>
                         </Carousel.Item>
