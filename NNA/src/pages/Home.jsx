@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // For navigation on row click
 import Container from "react-bootstrap/Container";
+import { useTimestamp } from "../context/TimestampContext"; // Import context
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
@@ -9,6 +10,7 @@ import "../styles/Home.css";
 
 function Home() {
   const [sessions, setSessions] = useState([]);
+  const { setTimestamp } = useTimestamp(); // Get setter function from context
   const navigate = useNavigate(); // Hook to navigate on row click
 
   useEffect(() => {
@@ -36,13 +38,23 @@ function Home() {
   };
 
   // Handle row click: Pass raw timestamp to another component
+
   const handleRowClick = (session) => {
     const formattedTimestamp = session.sessionInfo.runtimestamp.replace(
       "T",
       " "
     );
-    navigate("/agents", { state: { runtimestamp: formattedTimestamp } });
+    setTimestamp(formattedTimestamp); // Store in context
+    navigate("/agents");
   };
+
+  // const handleRowClick = (session) => {
+  //   const formattedTimestamp = session.sessionInfo.runtimestamp.replace(
+  //     "T",
+  //     " "
+  //   );
+  //   navigate("/agents", { state: { runtimestamp: formattedTimestamp } });
+  // };
 
   return (
     <div>

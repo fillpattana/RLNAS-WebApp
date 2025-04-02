@@ -12,7 +12,8 @@ import "../styles/Agents.css";
 import Properties from "../components/Properties";
 import TablesList from "../BackendTest/TablesList";
 import DAGTest from "../components/DAGTest";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
+import { useTimestamp } from "../context/TimestampContext"; // Import context
 
 function Agents() {
   const [agents, setAgents] = useState([]);
@@ -24,10 +25,14 @@ function Agents() {
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
   const [graphData, setGraphData] = useState({});
+
   // const timestamp = "2025-04-02 08:57:35.174414";
-  const location = useLocation();
-  const timestamp =
-    location.state?.runtimestamp || "wrong timestamp being passed by home"; // Fallback if null
+  // const location = useLocation();
+  // const timestamp =
+  //   location.state?.runtimestamp || "wrong timestamp being passed by home"; // Fallback if null
+
+  const { timestamp } = useTimestamp(); // Get timestamp from context
+
   const ws = useRef(null); // WebSocket reference
 
   const fetchAgentCount = async () => {
@@ -126,7 +131,9 @@ function Agents() {
   };
 
   useEffect(() => {
-    fetchAgentCount();
+    if (timestamp) {
+      fetchAgentCount();
+    }
   }, [timestamp]);
 
   useEffect(() => {
