@@ -10,9 +10,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// const timestamp = "2025-04-02 08:57:35.174414";
-
-
 function LossChart({runtimestamp}) {
   const [chartData, setChartData] = useState([]);
   const ws = useRef(null); // WebSocket reference
@@ -92,8 +89,6 @@ function LossChart({runtimestamp}) {
     };
   }, [runtimestamp]);
     
-
-
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart

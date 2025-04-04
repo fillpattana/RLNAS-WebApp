@@ -127,6 +127,13 @@ function OverallFlopChart({runtimestamp}) {
     };
   }, [runtimestamp]);
 
+  const accuracyValues = chartData.flatMap((entry) =>
+    agents.map((agent) => entry[agent]).filter((val) => val !== null && val !== undefined)
+  );
+
+  const minAccuracy = Math.min(...accuracyValues);
+  const maxAccuracy = Math.max(...accuracyValues);
+
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart
@@ -156,8 +163,7 @@ function OverallFlopChart({runtimestamp}) {
             position: "insideLeft",
             stroke: "#8884d8",
           }}
-          domain={[0, 100]}
-        />
+          domain={[minAccuracy, maxAccuracy]}/>
         <Tooltip />
         <Legend layout="horizontal" verticalAlign="top" align="center" />
 
