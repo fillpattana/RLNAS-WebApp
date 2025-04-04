@@ -218,7 +218,7 @@ function Agents() {
     ws.current.onopen = () => {
       console.log("WebSocket connected! (Agents)");
   
-      // ✅ Subscribe to finalized_update
+      // Subscribe to finalized_update
       ws.current.send(JSON.stringify({ type: "subscribe", channel: "finalized_update" }));
     };
   

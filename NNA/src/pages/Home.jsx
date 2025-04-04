@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import { useTimestamp } from "../context/TimestampContext";
@@ -16,13 +16,57 @@ function Home() {
   const { setTimestamp } = useTimestamp();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const ws = useRef(null); // WebSocket reference
 
-  useEffect(() => {
+  
+  const fetchData = async () => {
     fetch("http://localhost:3000/api/ActiveSessions")
       .then((response) => response.json())
       .then((data) => setSessions(data))
       .catch((error) => console.error("Error fetching sessions:", error));
+  }
+
+  useEffect(() => {
+      fetchData();
   }, []);
+  
+  useEffect(() => {
+    // WebSocket setup
+    ws.current = new WebSocket("ws://localhost:3000");
+
+    ws.current.onopen = () => {
+      console.log("WebSocket connected Session Selection");
+      // Subscribe to the "sessions_change" channel
+      ws.current.send(JSON.stringify({ type: "subscribe", channel: "sessions_change" }));
+    };
+
+    ws.current.onmessage = (event) => {
+      try {
+        const realTimeData = JSON.parse(event.data);
+        console.log("Received WebSocket update in Session Selections:", realTimeData);
+
+        // Trigger data refresh on sessions_change
+        fetchData();
+      } catch (error) {
+        console.error("WebSocket message error:", error);
+      }
+    };
+
+    ws.current.onerror = (err) => console.error("WebSocket error:", err);
+
+    ws.current.onclose = () => {
+      console.log("WebSocket closed, attempting to reconnect...");
+      setTimeout(() => {
+        if (ws.current?.readyState !== 1) {
+          ws.current = new WebSocket("ws://localhost:3000");
+        }
+      }, 3000);
+    };
+
+    return () => {
+      ws.current?.close();
+    };
+  },[]);
 
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "-";
