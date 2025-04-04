@@ -9,6 +9,7 @@ import Table from "react-bootstrap/Table";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Alert from "react-bootstrap/Alert";
 import "../styles/Home.css";
 
 function Home() {
@@ -16,8 +17,13 @@ function Home() {
   const { setTimestamp } = useTimestamp();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const ws = useRef(null); // WebSocket reference
 
+  const handleSessionCreated = () => {
+    setShowModal(false);
+    setShowSuccessAlert(true);
+  };
   
   const fetchData = async () => {
     fetch("http://localhost:3000/api/ActiveSessions")
@@ -96,9 +102,28 @@ function Home() {
     (session) => session.sessionInfo.endtimestamp === null
   );
 
+  useEffect(() => {
+    if (showSuccessAlert) {
+      const timer = setTimeout(() => setShowSuccessAlert(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessAlert]);
+  
+
   return (
     <div>
       <Container>
+      {showSuccessAlert && (
+        <Alert
+          variant="success"
+          dismissible
+          onClose={() => setShowSuccessAlert(false)}
+          className="mt-3"
+        >
+          <Alert.Heading>Session Created</Alert.Heading>
+          <p>Your new Neural Architecture Search session has been successfully created.</p>
+        </Alert>
+        )}
         <Row>
           <div className="elements-container">
             <Col>
@@ -165,7 +190,7 @@ function Home() {
             <Modal.Title>Create New Session</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <SessionForm />
+          <SessionForm onSuccess={handleSessionCreated} />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowModal(false)}>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form, Button, Card, Row, Col } from "react-bootstrap";
 
-function SessionForm() {
+function SessionForm({ onSuccess }) {
   const [formData, setFormData] = useState({
     datasetname: "",
     floatprecision: 16,
@@ -71,6 +71,7 @@ function SessionForm() {
 
       const result = await response.json();
       console.log("Success:", result);
+      if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error submitting form data:", error);
     }
