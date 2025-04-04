@@ -172,21 +172,67 @@ function Agents() {
     }
   };
 
+  // useEffect(() => {
+  //   ws.current = new WebSocket("ws://localhost:3000");
+
+  //   ws.current.onopen = () => console.log("WebSocket connected!");
+  //   ws.current.onmessage = (event) => {
+  //     try {
+  //       const realTimeData = JSON.parse(event.data);
+  //       console.log("Received WebSocket update:", realTimeData);
+
+  //       if (realTimeData.graphid) {
+  //         fetchAgentCount();
+  //         if (activeAgent) {
+  //           const agentNum = activeAgent.split(" ")[1];
+  //           fetchEpisodeCount(agentNum);
+
+  //           if (activeEpisode) {
+  //             const episodeNum = activeEpisode.name.split(" ")[1];
+  //             fetchIterationCount(agentNum, episodeNum);
+  //           }
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error parsing WebSocket message:", error);
+  //     }
+  //   };
+
+  //   ws.current.onclose = () => {
+  //     console.log("WebSocket disconnected. Attempting to reconnect...");
+  //     setTimeout(() => {
+  //       ws.current = new WebSocket("ws://localhost:3000");
+  //     }, 3000);
+  //   };
+
+  //   ws.current.onerror = (error) => console.error("WebSocket error:", error);
+
+  //   return () => {
+  //     if (ws.current) ws.current.close();
+  //   };
+  // }, [activeAgent, activeEpisode]);
+
   useEffect(() => {
     ws.current = new WebSocket("ws://localhost:3000");
-
-    ws.current.onopen = () => console.log("WebSocket connected!");
+  
+    ws.current.onopen = () => {
+      console.log("WebSocket connected! (Agents)");
+  
+      // ✅ Subscribe to finalized_update
+      ws.current.send(JSON.stringify({ type: "subscribe", channel: "finalized_update" }));
+    };
+  
     ws.current.onmessage = (event) => {
       try {
         const realTimeData = JSON.parse(event.data);
         console.log("Received WebSocket update:", realTimeData);
-
+  
         if (realTimeData.graphid) {
           fetchAgentCount();
           if (activeAgent) {
             const agentNum = activeAgent.split(" ")[1];
             fetchEpisodeCount(agentNum);
-
+  
             if (activeEpisode) {
               const episodeNum = activeEpisode.name.split(" ")[1];
               fetchIterationCount(agentNum, episodeNum);
@@ -197,20 +243,21 @@ function Agents() {
         console.error("Error parsing WebSocket message:", error);
       }
     };
-
+  
     ws.current.onclose = () => {
       console.log("WebSocket disconnected. Attempting to reconnect...");
       setTimeout(() => {
         ws.current = new WebSocket("ws://localhost:3000");
       }, 3000);
     };
-
+  
     ws.current.onerror = (error) => console.error("WebSocket error:", error);
-
+  
     return () => {
       if (ws.current) ws.current.close();
     };
   }, [activeAgent, activeEpisode]);
+  
 
   return (
     <div>

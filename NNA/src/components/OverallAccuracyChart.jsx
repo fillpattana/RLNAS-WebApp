@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   LineChart,
   Line,
@@ -10,93 +10,100 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// const timestamp = "2025-04-02 08:57:35.174414";
-
-function OverallAccuracyChart({runtimestamp}) {
+function OverallAccuracyChart({ runtimestamp }) {
   const [chartData, setChartData] = useState([]);
   const [agents, setAgents] = useState([]);
+  const ws = useRef(null); // WebSocket reference
 
-  // Predefined distinct colors for up to 12 agents
   const colorPalette = [
-    "#1f77b4",
-    "#ff7f0e",
-    "#2ca02c",
-    "#d62728",
-    "#9467bd",
-    "#8c564b",
-    "#e377c2",
-    "#7f7f7f",
-    "#bcbd22",
-    "#17becf",
-    "#fdae61",
-    "#377eb8",
+    "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b",
+    "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", "#fdae61", "#377eb8",
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("Fetching Iteration Metrics...");
-        const response = await fetch(
-          `http://localhost:3000/api/OverviewAccMetric/${encodeURIComponent(
-            runtimestamp
-          )}`
-        );
-        if (!response.ok) {
-          throw new Error(
-            `OverviewAccMetric end point is receiving timestamp=${runtimestamp}`
-          );
-        }
-        const result = await response.json();
+  const fetchData = async () => {
+    try {
+      console.log("Fetching Iteration Metrics...");
+      const response = await fetch(
+        `http://localhost:3000/api/OverviewAccMetric/${encodeURIComponent(runtimestamp)}`
+      );
+      if (!response.ok) throw new Error(`API call failed with timestamp=${runtimestamp}`);
+      const result = await response.json();
 
-        let transformedData = [];
-        let agentNames = new Set();
+      let transformedData = [];
+      let agentNames = new Set();
 
-        // Transform data to match Recharts format
-        Object.entries(result).forEach(([agentKey, episodes]) => {
-          agentNames.add(agentKey); // Collect agent names
-
-          Object.entries(episodes).forEach(([episodeKey, accuracy]) => {
-            let episodeNum = parseInt(episodeKey.replace("EPISODE", ""), 10);
-            if (!isNaN(episodeNum)) {
-              let existingEntry = transformedData.find(
-                (entry) => entry.episodeNum === episodeNum
-              );
-
-              if (!existingEntry) {
-                existingEntry = { episodeNum };
-                transformedData.push(existingEntry);
-              }
-
-              existingEntry[agentKey] = accuracy !== null ? accuracy : null;
+      Object.entries(result).forEach(([agentKey, episodes]) => {
+        agentNames.add(agentKey);
+        Object.entries(episodes).forEach(([episodeKey, accuracy]) => {
+          let episodeNum = parseInt(episodeKey.replace("EPISODE", ""), 10);
+          if (!isNaN(episodeNum)) {
+            let existingEntry = transformedData.find((entry) => entry.episodeNum === episodeNum);
+            if (!existingEntry) {
+              existingEntry = { episodeNum };
+              transformedData.push(existingEntry);
             }
-          });
+            existingEntry[agentKey] = accuracy !== null ? accuracy : null;
+          }
         });
+      });
 
-        // Sort by episode number
-        transformedData.sort((a, b) => a.episodeNum - b.episodeNum);
+      transformedData.sort((a, b) => a.episodeNum - b.episodeNum);
+      setChartData(transformedData);
+      setAgents(Array.from(agentNames));
 
-        setChartData(transformedData);
-        setAgents(Array.from(agentNames));
+      console.log("Transformed Chart Data:", transformedData);
+    } catch (error) {
+      console.error("Error fetching chart data:", error);
+    }
+  };
 
-        console.log("Transformed Chart Data:", transformedData);
+  useEffect(() => {
+    fetchData();
+  }, [runtimestamp]);
+
+  useEffect(() => {
+    // WebSocket setup
+    ws.current = new WebSocket("ws://localhost:3000");
+
+    ws.current.onopen = () => {
+      console.log("WebSocket connected (OverallAccuracyChart)");
+      // Subscribe to the "new_iterationmetrics" channel
+      ws.current.send(JSON.stringify({ type: "subscribe", channel: "new_iterationmetrics" }));
+    };
+
+    ws.current.onmessage = (event) => {
+      try {
+        const realTimeData = JSON.parse(event.data);
+        console.log("Received WebSocket update in OverallAccuracyChart:", realTimeData);
+
+        // Trigger data refresh on new_iterationmetrics
+        fetchData();
       } catch (error) {
-        console.error("Error fetching chart data:", error);
+        console.error("WebSocket message error:", error);
       }
     };
 
-    fetchData();
+    ws.current.onerror = (err) => console.error("WebSocket error:", err);
+
+    ws.current.onclose = () => {
+      console.log("WebSocket closed, attempting to reconnect...");
+      setTimeout(() => {
+        if (ws.current?.readyState !== 1) {
+          ws.current = new WebSocket("ws://localhost:3000");
+        }
+      }, 3000);
+    };
+
+    return () => {
+      ws.current?.close();
+    };
   }, [runtimestamp]);
 
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart
         data={chartData}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 30,
-        }}
+        margin={{ top: 5, right: 30, left: 20, bottom: 30 }}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
@@ -116,12 +123,10 @@ function OverallAccuracyChart({runtimestamp}) {
             position: "insideLeft",
             stroke: "#8884d8",
           }}
-          domain={[0, 0.05]} // Assuming accuracy is between 0 and 1
+          domain={[0, 0.05]}
         />
         <Tooltip />
         <Legend layout="horizontal" verticalAlign="top" align="center" />
-
-        {/* Generate dynamic lines for each agent */}
         {agents.map((agent, index) => (
           <Line
             key={agent}
@@ -129,7 +134,7 @@ function OverallAccuracyChart({runtimestamp}) {
             dataKey={agent}
             stroke={
               colorPalette[index] || `hsl(${(index * 40) % 360}, 70%, 50%)`
-            } // Fallback for more than 12 agents
+            }
             activeDot={{ r: 6 }}
           />
         ))}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   LineChart,
   Line,
@@ -15,7 +15,8 @@ import {
 function OverallFlopChart({runtimestamp}) {
   const [chartData, setChartData] = useState([]);
   const [agents, setAgents] = useState([]);
-
+  const ws = useRef(null); // WebSocket reference
+  
   // Predefined distinct colors for up to 12 agents
   const colorPalette = [
     "#1f77b4",
@@ -32,7 +33,6 @@ function OverallFlopChart({runtimestamp}) {
     "#377eb8",
   ];
 
-  useEffect(() => {
     const fetchData = async () => {
       try {
         console.log("Fetching Iteration Metrics...");
@@ -85,7 +85,46 @@ function OverallFlopChart({runtimestamp}) {
       }
     };
 
+  useEffect(() => {
     fetchData();
+  }, [runtimestamp]);
+
+  useEffect(() => {
+    // WebSocket setup
+    ws.current = new WebSocket("ws://localhost:3000");
+
+    ws.current.onopen = () => {
+      console.log("WebSocket connected (OverallFlopChart)");
+      // Subscribe to the "new_iterationmetrics" channel
+      ws.current.send(JSON.stringify({ type: "subscribe", channel: "new_iterationmetrics" }));
+    };
+
+    ws.current.onmessage = (event) => {
+      try {
+        const realTimeData = JSON.parse(event.data);
+        console.log("Received WebSocket update in OverallFlopChart:", realTimeData);
+
+        // Trigger data refresh on new_iterationmetrics
+        fetchData();
+      } catch (error) {
+        console.error("WebSocket message error:", error);
+      }
+    };
+
+    ws.current.onerror = (err) => console.error("WebSocket error:", err);
+
+    ws.current.onclose = () => {
+      console.log("WebSocket closed, attempting to reconnect...");
+      setTimeout(() => {
+        if (ws.current?.readyState !== 1) {
+          ws.current = new WebSocket("ws://localhost:3000");
+        }
+      }, 3000);
+    };
+
+    return () => {
+      ws.current?.close();
+    };
   }, [runtimestamp]);
 
   return (

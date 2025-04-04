@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   LineChart,
   Line,
@@ -15,43 +15,84 @@ import {
 
 function LossChart({runtimestamp}) {
   const [chartData, setChartData] = useState([]);
+  const ws = useRef(null); // WebSocket reference
+
+  const fetchData = async () => {
+    try {
+      console.log("Fetching Loss Metrics...");
+
+      const response = await fetch(
+        `http://localhost:3000/api/LossMetric/${encodeURIComponent(
+          runtimestamp
+        )}`
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Performance chart is receiving timestamp=${runtimestamp}`
+        );
+      }
+      const result = await response.json();
+
+      // Transform backend data to the format required by the chart
+      const transformedData = result.map((item) => ({
+        loss: parseFloat(item.loss),
+        epoch: parseInt(item.epoch, 10),
+      }));
+
+      setChartData(transformedData);
+
+      console.log(
+        `Performance Chart data fetched for runtimestamp: ${runtimestamp}`,
+        transformedData
+      );
+    } catch (error) {
+      console.error("Error fetching chart data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
+    fetchData();
+  }, [runtimestamp]);
+
+  useEffect(() => {
+    // WebSocket setup
+    ws.current = new WebSocket("ws://localhost:3000");
+
+    ws.current.onopen = () => {
+      console.log("WebSocket connected (LossMetricsChart)");
+      // Subscribe to the "new_lossmetrics" channel
+      ws.current.send(JSON.stringify({ type: "subscribe", channel: "new_lossmetrics" }));
+    };
+
+    ws.current.onmessage = (event) => {
       try {
-        console.log("Fetching Loss Metrics...");
+        const realTimeData = JSON.parse(event.data);
+        console.log("Received WebSocket update in LossMetricsChart:", realTimeData);
 
-        const response = await fetch(
-          `http://localhost:3000/api/LossMetric/${encodeURIComponent(
-            runtimestamp
-          )}`
-        );
-        if (!response.ok) {
-          throw new Error(
-            `Performance chart is receiving timestamp=${runtimestamp}`
-          );
-        }
-        const result = await response.json();
-
-        // Transform backend data to the format required by the chart
-        const transformedData = result.map((item) => ({
-          loss: parseFloat(item.loss),
-          epoch: parseInt(item.epoch, 10),
-        }));
-
-        setChartData(transformedData);
-
-        console.log(
-          `Performance Chart data fetched for runtimestamp: ${runtimestamp}`,
-          transformedData
-        );
+        // Trigger data refresh on new_iterationmetrics
+        fetchData();
       } catch (error) {
-        console.error("Error fetching chart data:", error);
+        console.error("WebSocket message error:", error);
       }
     };
 
-    fetchData();
+    ws.current.onerror = (err) => console.error("WebSocket error:", err);
+
+    ws.current.onclose = () => {
+      console.log("WebSocket closed, attempting to reconnect...");
+      setTimeout(() => {
+        if (ws.current?.readyState !== 1) {
+          ws.current = new WebSocket("ws://localhost:3000");
+        }
+      }, 3000);
+    };
+
+    return () => {
+      ws.current?.close();
+    };
   }, [runtimestamp]);
+    
+
 
   return (
     <ResponsiveContainer width="100%" height={400}>
