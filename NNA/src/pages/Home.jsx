@@ -121,7 +121,8 @@ function Home() {
           className="mt-3"
         >
           <Alert.Heading>Session Created</Alert.Heading>
-          <p>Your new Neural Architecture Search session has been successfully created.</p>
+          <p>Your new Neural Architecture Search session has been successfully created. 
+            <br/> Please wait a few moments, before viewing the active session from the tables.</p>
         </Alert>
         )}
         <Row>
