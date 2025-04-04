@@ -234,7 +234,7 @@ function SessionForm() {
       </Card>
 
       <Button variant="primary" type="submit">
-        Begin Session
+        Create New Session
       </Button>
     </Form>
   );
