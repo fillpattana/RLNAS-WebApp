@@ -10,10 +10,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const timestamp = "2025-01-02 10:10:10";
+// const timestamp = "2025-04-02 08:57:35.174414";
 
-//no timestamp needs to be selected by user
-function OverallFlopChart() {
+function OverallFlopChart({runtimestamp}) {
   const [chartData, setChartData] = useState([]);
   const [agents, setAgents] = useState([]);
 
@@ -39,12 +38,12 @@ function OverallFlopChart() {
         console.log("Fetching Iteration Metrics...");
         const response = await fetch(
           `http://localhost:3000/api/OverviewFlopMetric/${encodeURIComponent(
-            timestamp
+            runtimestamp
           )}`
         );
         if (!response.ok) {
           throw new Error(
-            `OverviewFlopMetric endpoint is receiving timestamp=${timestamp}`
+            `OverviewFlopMetric endpoint is receiving timestamp=${runtimestamp}`
           );
         }
         const result = await response.json();
@@ -87,7 +86,7 @@ function OverallFlopChart() {
     };
 
     fetchData();
-  }, [timestamp]);
+  }, [runtimestamp]);
 
   return (
     <ResponsiveContainer width="100%" height={400}>

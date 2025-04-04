@@ -4,8 +4,10 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import OverallFlopChart from "../components/OverallFlopChart";
+import { useTimestamp } from "../context/TimestampContext"; // Import context
 
 function Overview() {
+  const { timestamp } = useTimestamp(); // Get timestamp from context
   return (
     <div>
       <Container>
@@ -13,19 +15,19 @@ function Overview() {
           <div className="elements-container">
             <Col>
               <h3> Overall Epoch/Loss of All Agents </h3>
-              <LossChart />
+              <LossChart runtimestamp={timestamp}/>
             </Col>
           </div>
           <div className="elements-container">
             <Col>
               <h3> Overall Accuracy of All Agents </h3>
-              <OverallAccuracyChart />
+              <OverallAccuracyChart runtimestamp={timestamp}/>
             </Col>
           </div>
           <div className="elements-container">
             <Col>
               <h3> Overall Flop Rate of All Agents </h3>
-              <OverallFlopChart />
+              <OverallFlopChart runtimestamp={timestamp}/>
             </Col>
           </div>
         </Row>

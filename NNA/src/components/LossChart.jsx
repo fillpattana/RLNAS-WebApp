@@ -10,9 +10,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const timestamp = "2025-01-02 10:10:10";
+// const timestamp = "2025-04-02 08:57:35.174414";
 
-function LossChart() {
+
+function LossChart({runtimestamp}) {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
@@ -22,12 +23,12 @@ function LossChart() {
 
         const response = await fetch(
           `http://localhost:3000/api/LossMetric/${encodeURIComponent(
-            timestamp
+            runtimestamp
           )}`
         );
         if (!response.ok) {
           throw new Error(
-            `Performance chart is receiving timestamp=${timestamp}`
+            `Performance chart is receiving timestamp=${runtimestamp}`
           );
         }
         const result = await response.json();
@@ -41,7 +42,7 @@ function LossChart() {
         setChartData(transformedData);
 
         console.log(
-          `Performance Chart data fetched for runtimestamp: ${timestamp}`,
+          `Performance Chart data fetched for runtimestamp: ${runtimestamp}`,
           transformedData
         );
       } catch (error) {
@@ -50,7 +51,7 @@ function LossChart() {
     };
 
     fetchData();
-  }, [timestamp]);
+  }, [runtimestamp]);
 
   return (
     <ResponsiveContainer width="100%" height={400}>

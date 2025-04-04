@@ -12,6 +12,7 @@ import "../styles/Agents.css";
 import Properties from "../components/Properties";
 import TablesList from "../BackendTest/TablesList";
 import DAGTest from "../components/DAGTest";
+import { useTimestamp } from "../context/TimestampContext"; // Import context
 
 function Agents() {
   const [agents, setAgents] = useState([]);
@@ -23,7 +24,8 @@ function Agents() {
   const [selectedNode, setSelectedNode] = useState(null);
   const selectedNodeRef = useRef(null);
   const [graphData, setGraphData] = useState({});
-  const timestamp = "2025-03-29 03:17:22.329576";
+  // const timestamp = "2025-04-02 08:57:35.174414";
+  const { timestamp } = useTimestamp(); // Get timestamp from context
   const ws = useRef(null); // WebSocket reference
 
   const fetchAgentCount = async () => {
@@ -85,7 +87,7 @@ function Agents() {
       console.error("Error fetching episode count:", error);
     }
   };
-//
+
   const fetchIterationCount = async (agentNum, episodeNum) => {
     try {
       const response = await fetch(
@@ -122,7 +124,9 @@ function Agents() {
   };
 
   useEffect(() => {
-    fetchAgentCount();
+    if (timestamp) {
+      fetchAgentCount();
+    }
   }, [timestamp]);
 
   useEffect(() => {
@@ -136,6 +140,7 @@ function Agents() {
     if (activeAgent && activeEpisode) {
       const agentNum = activeAgent.split(" ")[1];
       const episodeNum = activeEpisode.name.split(" ")[1];
+      console.log("episode Num activated inside (activeAgent && activeEpisode):",episodeNum)
       fetchIterationCount(agentNum, episodeNum);
 
       setGraphData({}); // Reset graph data to avoid stale cache
