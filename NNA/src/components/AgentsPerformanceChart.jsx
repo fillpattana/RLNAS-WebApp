@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function AgentsPerformanceChart({ agentNum, episodeNum }) {
+function AgentsPerformanceChart({ runtimestamp, agentNum, episodeNum }) {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ function AgentsPerformanceChart({ agentNum, episodeNum }) {
         console.log("Fetching Iteration Metrics...");
 
         const response = await fetch(
-          `http://localhost:3000/api/IterationMetric?agentNum=${agentNum}&episodeNum=${episodeNum}`
+          `http://localhost:3000/api/IterationMetric/${encodeURIComponent(runtimestamp)}?agentNum=${agentNum}&episodeNum=${episodeNum}`
         );
         if (!response.ok) {
           throw new Error(

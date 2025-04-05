@@ -330,6 +330,7 @@ function Agents() {
                 <div className="centered-container">
                   {activeAgent && activeEpisode ? (
                     <AgentsPerformanceChart
+                      runtimestamp={timestamp}
                       agentNum={activeAgent.split(" ")[1]}
                       episodeNum={activeEpisode.name.split(" ")[1]}
                     />
