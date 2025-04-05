@@ -25,7 +25,7 @@ function LossChart({runtimestamp}) {
       );
       if (!response.ok) {
         throw new Error(
-          `Performance chart is receiving timestamp=${runtimestamp}`
+          `Loss chart is receiving timestamp=${runtimestamp}`
         );
       }
       const result = await response.json();
@@ -39,7 +39,7 @@ function LossChart({runtimestamp}) {
       setChartData(transformedData);
 
       console.log(
-        `Performance Chart data fetched for runtimestamp: ${runtimestamp}`,
+        `Loss Chart data fetched for runtimestamp: ${runtimestamp}`,
         transformedData
       );
     } catch (error) {
