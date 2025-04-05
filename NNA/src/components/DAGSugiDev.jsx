@@ -32,7 +32,7 @@ const createGraphSugiyama = (graph, data) => {
     }
 
     graph.addNode(index.toString(), {
-      label: `${type.toUpperCase()}`,
+      // label: `${type.toUpperCase()}`,
       // size: params?.weights ? 20 + params.weights.flat().length : 15,
       // size: 10 + (params.numofnodes * (30/100)),
       size: 20,
@@ -159,7 +159,68 @@ function DAGSugi({ graphData, onNodeClick }) {
     return () => renderer.kill();
   }, [graphData, onNodeClick]);
 
-  return <div ref={containerRef} style={sigmaStyle}></div>;
+  return (
+    <div style={{ position: "relative", ...sigmaStyle }}>
+      <div ref={containerRef} style={{ width: "100%", height: "100%" }}></div>
+      
+      {/* Legend overlay */}
+      <div
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          padding: "8px 12px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+          fontSize: "14px",
+        }}
+      >
+        <strong>Legend</strong>
+        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+          <li>
+            <span
+              style={{
+                background: "#3cba72",
+                display: "inline-block",
+                width: "12px",
+                height: "12px",
+                marginRight: "8px",
+                borderRadius: "50%",
+              }}
+            ></span>
+            Input
+          </li>
+          <li>
+            <span
+              style={{
+                background: "#4065fa",
+                display: "inline-block",
+                width: "12px",
+                height: "12px",
+                marginRight: "8px",
+                borderRadius: "50%",
+              }}
+            ></span>
+            Dense
+          </li>
+          <li>
+            <span
+              style={{
+                background: "#FA4F40",
+                display: "inline-block",
+                width: "12px",
+                height: "12px",
+                marginRight: "8px",
+                borderRadius: "50%",
+              }}
+            ></span>
+            Convolutional
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
 }
 
 export default DAGSugi;
