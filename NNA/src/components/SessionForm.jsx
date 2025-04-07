@@ -235,7 +235,7 @@ function SessionForm({ onSuccess }) {
       </Card>
 
       <Button variant="primary" type="submit">
-        Create New Session
+        Confirm
       </Button>
     </Form>
   );

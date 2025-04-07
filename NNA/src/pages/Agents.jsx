@@ -325,7 +325,7 @@ function Agents() {
               </div>
             </Col>
             <Col>
-              <h3>{activeAgent}'s Training Time and Accuracy</h3>
+              <h3>{activeAgent}-{activeEpisode?.name}'s FLOPs and Accuracy</h3>
               <div className="shadow-lg rounded">
                 <div className="centered-container">
                   {activeAgent && activeEpisode ? (
