@@ -18,11 +18,52 @@ function Home() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showStopAlert, setShowStopAlert] = useState(false);
   const ws = useRef(null); // WebSocket reference
 
   const handleSessionCreated = () => {
     setShowModal(false);
     setShowSuccessAlert(true);
+  };
+
+  const handleStopSession = async () => {
+    try {
+      const activeSession = sessions.find(
+        (session) => session.sessionInfo.endtimestamp === null
+      );
+
+      console.log(activeSession)
+  
+      if (!activeSession) {
+        console.warn("No active session to stop.");
+        return;
+      }
+  
+      // Format current timestamp in 'YYYY-MM-DD HH:MM:SS.SSSSSS'
+      const now = new Date();
+      const formattedTimestamp = now.toISOString().replace("T", " ").replace("Z", "");
+  
+      const response = await fetch(`http://localhost:3000/api/stopsession`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionid: activeSession.sessionInfo.sessionid,
+          endtimestamp: formattedTimestamp,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to stop the session");
+      }
+  
+      console.log("Session stopped successfully");
+      fetchData(); // Refresh session data
+      setShowStopAlert(true); // Optional: show success alert
+    } catch (error) {
+      console.error("Error stopping session:", error);
+    }
   };
   
   const fetchData = async () => {
@@ -108,6 +149,13 @@ function Home() {
       return () => clearTimeout(timer);
     }
   }, [showSuccessAlert]);
+
+  useEffect(() => {
+    if (showStopAlert) {
+      const timer = setTimeout(() => setShowStopAlert(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showStopAlert]);
   
 
   return (
@@ -124,7 +172,19 @@ function Home() {
           <p>Your new Neural Architecture Search session has been successfully created. 
             <br/> Please wait a few moments, before viewing the active session from the tables.</p>
         </Alert>
-        )}
+      )}
+      {showStopAlert && (
+        <Alert
+          variant="success"
+          dismissible
+          onClose={() => setShowStopAlert(false)}
+          className="mt-3"
+        >
+          <Alert.Heading>Session Created</Alert.Heading>
+          <p>Active sessions has been stopped. 
+            <br/> You are now able to create a new session.</p>
+        </Alert>
+      )}
         <Row>
           <div className="elements-container">
             <Col>
@@ -181,6 +241,16 @@ function Home() {
               disabled={hasActiveSession}
             >
               Create New Session
+            </Button>
+          </Col>
+          <Col className="text-center">
+            {/* "Stop Active Session" Button */}
+            <Button
+              variant="danger"
+              onClick={handleStopSession}
+              disabled={!hasActiveSession}
+            >
+              Stop Active Session
             </Button>
           </Col>
         </Row>
