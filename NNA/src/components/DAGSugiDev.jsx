@@ -95,14 +95,7 @@ function DAGSugi({ graphData, onNodeClick }) {
           console.error(`Node data not found for ID ${clickedNodeId}`);
           return;
         }
-
-        onNodeClick({
-          id: clickedNodeId,
-          type: nodeData.type,
-          activation: nodeData.activation?.type || "none",
-          weights: nodeData.params?.weights || [],
-          biases: nodeData.params?.biases || [],
-        });
+        onNodeClick({ ...nodeData, id: clickedNodeId });
       },
       { passive: true }
     );
@@ -162,7 +155,7 @@ function DAGSugi({ graphData, onNodeClick }) {
   return (
     <div style={{ position: "relative", ...sigmaStyle }}>
       <div ref={containerRef} style={{ width: "100%", height: "100%" }}></div>
-      
+
       {/* Legend overlay */}
       <div
         style={{
