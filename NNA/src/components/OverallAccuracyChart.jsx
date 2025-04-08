@@ -16,17 +16,30 @@ function OverallAccuracyChart({ runtimestamp }) {
   const ws = useRef(null); // WebSocket reference
 
   const colorPalette = [
-    "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b",
-    "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", "#fdae61", "#377eb8",
+    "#1f77b4",
+    "#ff7f0e",
+    "#2ca02c",
+    "#d62728",
+    "#9467bd",
+    "#8c564b",
+    "#e377c2",
+    "#7f7f7f",
+    "#bcbd22",
+    "#17becf",
+    "#fdae61",
+    "#377eb8",
   ];
 
   const fetchData = async () => {
     try {
       console.log("Fetching Iteration Metrics...");
       const response = await fetch(
-        `http://localhost:3000/api/OverviewAccMetric/${encodeURIComponent(runtimestamp)}`
+        `http://localhost:3000/api/OverviewAccMetric/${encodeURIComponent(
+          runtimestamp
+        )}`
       );
-      if (!response.ok) throw new Error(`API call failed with timestamp=${runtimestamp}`);
+      if (!response.ok)
+        throw new Error(`API call failed with timestamp=${runtimestamp}`);
       const result = await response.json();
 
       let transformedData = [];
@@ -37,7 +50,9 @@ function OverallAccuracyChart({ runtimestamp }) {
         Object.entries(episodes).forEach(([episodeKey, accuracy]) => {
           let episodeNum = parseInt(episodeKey.replace("EPISODE", ""), 10);
           if (!isNaN(episodeNum)) {
-            let existingEntry = transformedData.find((entry) => entry.episodeNum === episodeNum);
+            let existingEntry = transformedData.find(
+              (entry) => entry.episodeNum === episodeNum
+            );
             if (!existingEntry) {
               existingEntry = { episodeNum };
               transformedData.push(existingEntry);
@@ -68,13 +83,18 @@ function OverallAccuracyChart({ runtimestamp }) {
     ws.current.onopen = () => {
       console.log("WebSocket connected (OverallAccuracyChart)");
       // Subscribe to the "new_iterationmetrics" channel
-      ws.current.send(JSON.stringify({ type: "subscribe", channel: "new_iterationmetrics" }));
+      ws.current.send(
+        JSON.stringify({ type: "subscribe", channel: "new_iterationmetrics" })
+      );
     };
 
     ws.current.onmessage = (event) => {
       try {
         const realTimeData = JSON.parse(event.data);
-        console.log("Received WebSocket update in OverallAccuracyChart:", realTimeData);
+        console.log(
+          "Received WebSocket update in OverallAccuracyChart:",
+          realTimeData
+        );
 
         // Trigger data refresh on new_iterationmetrics
         fetchData();
@@ -100,7 +120,9 @@ function OverallAccuracyChart({ runtimestamp }) {
   }, [runtimestamp]);
 
   const accuracyValues = chartData.flatMap((entry) =>
-    agents.map((agent) => entry[agent]).filter((val) => val !== null && val !== undefined)
+    agents
+      .map((agent) => entry[agent])
+      .filter((val) => val !== null && val !== undefined)
   );
 
   const minAccuracy = Math.min(...accuracyValues);
@@ -124,6 +146,7 @@ function OverallAccuracyChart({ runtimestamp }) {
         />
         <YAxis
           tick={{ fill: "#8884d8" }}
+          tickFormatter={(value) => value.toFixed(3)}
           label={{
             value: "Accuracy",
             angle: -90,
