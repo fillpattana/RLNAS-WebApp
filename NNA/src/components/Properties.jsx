@@ -17,7 +17,7 @@ function Properties({ node }) {
           <p>
             <strong>Activation Function:</strong> {activation?.type || "N/A"}
           </p>
-          <p>
+          {/* <p>
             <strong>Weights:</strong>
           </p>
           <p>
@@ -28,7 +28,7 @@ function Properties({ node }) {
           </p>
           <p>
             {params?.biases ? JSON.stringify(params.biases, null, 2) : "N/A"}
-          </p>
+          </p> */}
           <p>
             <strong>Stride:</strong> {params?.stride ?? "N/A"}
           </p>
@@ -53,7 +53,7 @@ function Properties({ node }) {
           <p>
             <strong>Activation Function:</strong> {activation?.type || "N/A"}
           </p>
-          <p>
+          {/* <p>
             <strong>Weights:</strong>
           </p>
           <p>
@@ -64,7 +64,7 @@ function Properties({ node }) {
           </p>
           <p>
             {params?.biases ? JSON.stringify(params.biases, null, 2) : "N/A"}
-          </p>
+          </p> */}
         </>
       )}
     </div>
