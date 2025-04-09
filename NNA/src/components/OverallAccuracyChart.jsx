@@ -149,11 +149,13 @@ function OverallAccuracyChart({ runtimestamp }) {
           tickFormatter={(value) => value.toFixed(3)}
           label={{
             value: "Accuracy",
-            angle: -90,
+            angle: 0,
             position: "insideLeft",
             stroke: "#8884d8",
+            dy: 200,
           }}
-          domain={[minAccuracy - 0.01, maxAccuracy + 0.01]}
+          // domain={[minAccuracy - 0.01, maxAccuracy + 0.01]}
+          domain={["auto", "auto"]}
         />
         <Tooltip />
         <Legend layout="horizontal" verticalAlign="top" align="center" />

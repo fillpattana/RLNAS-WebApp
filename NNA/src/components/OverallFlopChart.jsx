@@ -12,11 +12,11 @@ import {
 
 // const timestamp = "2025-04-02 08:57:35.174414";
 
-function OverallFlopChart({runtimestamp}) {
+function OverallFlopChart({ runtimestamp }) {
   const [chartData, setChartData] = useState([]);
   const [agents, setAgents] = useState([]);
   const ws = useRef(null); // WebSocket reference
-  
+
   // Predefined distinct colors for up to 12 agents
   const colorPalette = [
     "#1f77b4",
@@ -33,57 +33,57 @@ function OverallFlopChart({runtimestamp}) {
     "#377eb8",
   ];
 
-    const fetchData = async () => {
-      try {
-        console.log("Fetching Iteration Metrics...");
-        const response = await fetch(
-          `http://localhost:3000/api/OverviewFlopMetric/${encodeURIComponent(
-            runtimestamp
-          )}`
+  const fetchData = async () => {
+    try {
+      console.log("Fetching Iteration Metrics...");
+      const response = await fetch(
+        `http://localhost:3000/api/OverviewFlopMetric/${encodeURIComponent(
+          runtimestamp
+        )}`
+      );
+      if (!response.ok) {
+        throw new Error(
+          `OverviewFlopMetric endpoint is receiving timestamp=${runtimestamp}`
         );
-        if (!response.ok) {
-          throw new Error(
-            `OverviewFlopMetric endpoint is receiving timestamp=${runtimestamp}`
-          );
-        }
-        const result = await response.json();
-
-        let transformedData = [];
-        let agentNames = new Set();
-
-        // Transform data to match Recharts format
-        Object.entries(result).forEach(([agentKey, episodes]) => {
-          agentNames.add(agentKey); // Collect agent names
-
-          Object.entries(episodes).forEach(([episodeKey, trainingtime]) => {
-            let episodeNum = parseInt(episodeKey.replace("EPISODE", ""), 10);
-            if (!isNaN(episodeNum)) {
-              let existingEntry = transformedData.find(
-                (entry) => entry.episodeNum === episodeNum
-              );
-
-              if (!existingEntry) {
-                existingEntry = { episodeNum };
-                transformedData.push(existingEntry);
-              }
-
-              existingEntry[agentKey] =
-                trainingtime !== null ? trainingtime : null;
-            }
-          });
-        });
-
-        // Sort by episode number
-        transformedData.sort((a, b) => a.episodeNum - b.episodeNum);
-
-        setChartData(transformedData);
-        setAgents(Array.from(agentNames));
-
-        console.log("Transformed Chart Data:", transformedData);
-      } catch (error) {
-        console.error("Error fetching chart data:", error);
       }
-    };
+      const result = await response.json();
+
+      let transformedData = [];
+      let agentNames = new Set();
+
+      // Transform data to match Recharts format
+      Object.entries(result).forEach(([agentKey, episodes]) => {
+        agentNames.add(agentKey); // Collect agent names
+
+        Object.entries(episodes).forEach(([episodeKey, trainingtime]) => {
+          let episodeNum = parseInt(episodeKey.replace("EPISODE", ""), 10);
+          if (!isNaN(episodeNum)) {
+            let existingEntry = transformedData.find(
+              (entry) => entry.episodeNum === episodeNum
+            );
+
+            if (!existingEntry) {
+              existingEntry = { episodeNum };
+              transformedData.push(existingEntry);
+            }
+
+            existingEntry[agentKey] =
+              trainingtime !== null ? trainingtime : null;
+          }
+        });
+      });
+
+      // Sort by episode number
+      transformedData.sort((a, b) => a.episodeNum - b.episodeNum);
+
+      setChartData(transformedData);
+      setAgents(Array.from(agentNames));
+
+      console.log("Transformed Chart Data:", transformedData);
+    } catch (error) {
+      console.error("Error fetching chart data:", error);
+    }
+  };
 
   useEffect(() => {
     fetchData();
@@ -96,13 +96,18 @@ function OverallFlopChart({runtimestamp}) {
     ws.current.onopen = () => {
       console.log("WebSocket connected (OverallFlopChart)");
       // Subscribe to the "new_iterationmetrics" channel
-      ws.current.send(JSON.stringify({ type: "subscribe", channel: "new_iterationmetrics" }));
+      ws.current.send(
+        JSON.stringify({ type: "subscribe", channel: "new_iterationmetrics" })
+      );
     };
 
     ws.current.onmessage = (event) => {
       try {
         const realTimeData = JSON.parse(event.data);
-        console.log("Received WebSocket update in OverallFlopChart:", realTimeData);
+        console.log(
+          "Received WebSocket update in OverallFlopChart:",
+          realTimeData
+        );
 
         // Trigger data refresh on new_iterationmetrics
         fetchData();
@@ -128,7 +133,9 @@ function OverallFlopChart({runtimestamp}) {
   }, [runtimestamp]);
 
   const accuracyValues = chartData.flatMap((entry) =>
-    agents.map((agent) => entry[agent]).filter((val) => val !== null && val !== undefined)
+    agents
+      .map((agent) => entry[agent])
+      .filter((val) => val !== null && val !== undefined)
   );
 
   const minAccuracy = Math.min(...accuracyValues);
@@ -157,13 +164,23 @@ function OverallFlopChart({runtimestamp}) {
         />
         <YAxis
           tick={{ fill: "#8884d8" }}
+          tickFormatter={(value) => {
+            return Math.abs(value) >= 1e5
+              ? value.toExponential(2) // scientific notation with 2 decimal places
+              : value.toLocaleString(undefined, {
+                  maximumFractionDigits: 3,
+                });
+          }}
           label={{
             value: "Flop Rate",
-            angle: -90,
-            position: "insideLeft",
+            angle: 0,
+            position: "outsideRight",
             stroke: "#8884d8",
+            dy: 200,
           }}
-          domain={[minAccuracy, maxAccuracy]}/>
+          // domain={[minAccuracy, maxAccuracy]}
+          domain={["auto", "auto"]}
+        />
         <Tooltip />
         <Legend layout="horizontal" verticalAlign="top" align="center" />
 

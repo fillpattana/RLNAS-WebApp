@@ -19,7 +19,9 @@ function AgentsPerformanceChart({ runtimestamp, agentNum, episodeNum }) {
         console.log("Fetching Iteration Metrics...");
 
         const response = await fetch(
-          `http://localhost:3000/api/IterationMetric/${encodeURIComponent(runtimestamp)}?agentNum=${agentNum}&episodeNum=${episodeNum}`
+          `http://localhost:3000/api/IterationMetric/${encodeURIComponent(
+            runtimestamp
+          )}?agentNum=${agentNum}&episodeNum=${episodeNum}`
         );
         if (!response.ok) {
           throw new Error(
@@ -79,6 +81,7 @@ function AgentsPerformanceChart({ runtimestamp, agentNum, episodeNum }) {
             position: "insideLeft",
             stroke: "#8884d8",
           }}
+          domain={["auto", "auto"]}
         />
         <YAxis
           yAxisId="right"
@@ -90,6 +93,7 @@ function AgentsPerformanceChart({ runtimestamp, agentNum, episodeNum }) {
             position: "insideRight",
             stroke: "#82ca9d",
           }}
+          domain={["auto", "auto"]}
         />
         <Tooltip />
         <Legend layout="horizontal" verticalAlign="top" align="center" />
