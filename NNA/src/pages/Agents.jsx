@@ -12,6 +12,7 @@ import "../styles/Agents.css";
 import Properties from "../components/Properties";
 import TablesList from "../BackendTest/TablesList";
 import DAGTest from "../components/DAGTest";
+import JupyterLink from "../components/dagComps/JupyterLink";
 import { useTimestamp } from "../context/TimestampContext"; // Import context
 
 function Agents() {
@@ -33,7 +34,7 @@ function Agents() {
       const response = await fetch(
         `http://localhost:3000/api/AgentCount/${encodeURIComponent(timestamp)}`
       );
-      
+
       const data = await response.json();
 
       if (data.totalagents) {
@@ -61,7 +62,9 @@ function Agents() {
   const fetchEpisodeCount = async (agentNum) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/EpisodeCount/${encodeURIComponent(agentNum)}`
+        `http://localhost:3000/api/EpisodeCount/${encodeURIComponent(
+          timestamp
+        )}/${encodeURIComponent(agentNum)}`
       );
       const data = await response.json();
 
@@ -92,8 +95,8 @@ function Agents() {
     try {
       const response = await fetch(
         `http://localhost:3000/api/IterationCount/${encodeURIComponent(
-          agentNum
-        )}/${encodeURIComponent(episodeNum)}`
+          timestamp
+        )}/${encodeURIComponent(agentNum)}/${encodeURIComponent(episodeNum)}`
       );
       const data = await response.json();
 
@@ -110,11 +113,11 @@ function Agents() {
   const fetchGraphData = async (agentNum, episodeNum, iterationNum) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/dagJSON/${encodeURIComponent(timestamp)}/${encodeURIComponent(
-          agentNum
-        )}/${encodeURIComponent(episodeNum)}/${encodeURIComponent(
-          iterationNum
-        )}`
+        `http://localhost:3000/api/dagJSON/${encodeURIComponent(
+          timestamp
+        )}/${encodeURIComponent(agentNum)}/${encodeURIComponent(
+          episodeNum
+        )}/${encodeURIComponent(iterationNum)}`
       );
       return await response.json();
     } catch (error) {
@@ -140,7 +143,10 @@ function Agents() {
     if (activeAgent && activeEpisode) {
       const agentNum = activeAgent.split(" ")[1];
       const episodeNum = activeEpisode.name.split(" ")[1];
-      console.log("episode Num activated inside (activeAgent && activeEpisode):",episodeNum)
+      console.log(
+        "episode Num activated inside (activeAgent && activeEpisode):",
+        episodeNum
+      );
       fetchIterationCount(agentNum, episodeNum);
 
       setGraphData({}); // Reset graph data to avoid stale cache
@@ -214,25 +220,27 @@ function Agents() {
 
   useEffect(() => {
     ws.current = new WebSocket("ws://localhost:3000");
-  
+
     ws.current.onopen = () => {
       console.log("WebSocket connected! (Agents)");
-  
+
       // Subscribe to finalized_update
-      ws.current.send(JSON.stringify({ type: "subscribe", channel: "finalized_update" }));
+      ws.current.send(
+        JSON.stringify({ type: "subscribe", channel: "finalized_update" })
+      );
     };
-  
+
     ws.current.onmessage = (event) => {
       try {
         const realTimeData = JSON.parse(event.data);
         console.log("Received WebSocket update:", realTimeData);
-  
+
         if (realTimeData.graphid) {
           fetchAgentCount();
           if (activeAgent) {
             const agentNum = activeAgent.split(" ")[1];
             fetchEpisodeCount(agentNum);
-  
+
             if (activeEpisode) {
               const episodeNum = activeEpisode.name.split(" ")[1];
               fetchIterationCount(agentNum, episodeNum);
@@ -243,21 +251,20 @@ function Agents() {
         console.error("Error parsing WebSocket message:", error);
       }
     };
-  
+
     ws.current.onclose = () => {
       console.log("WebSocket disconnected. Attempting to reconnect...");
       setTimeout(() => {
         ws.current = new WebSocket("ws://localhost:3000");
       }, 3000);
     };
-  
+
     ws.current.onerror = (error) => console.error("WebSocket error:", error);
-  
+
     return () => {
       if (ws.current) ws.current.close();
     };
   }, [activeAgent, activeEpisode]);
-  
 
   return (
     <div>
@@ -314,6 +321,9 @@ function Agents() {
                 </div>
               </div>
             </Col>
+            <Col>
+              <JupyterLink graph={graphData} />{" "}
+            </Col>
           </Row>
         </div>
         <div className="elements-container">
@@ -325,7 +335,9 @@ function Agents() {
               </div>
             </Col>
             <Col>
-              <h3>{activeAgent}-{activeEpisode?.name}'s FLOPs and Accuracy</h3>
+              <h3>
+                {activeAgent}-{activeEpisode?.name}'s FLOPs and Accuracy
+              </h3>
               <div className="shadow-lg rounded">
                 <div className="centered-container">
                   {activeAgent && activeEpisode ? (

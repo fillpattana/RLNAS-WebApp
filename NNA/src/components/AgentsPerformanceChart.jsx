@@ -75,11 +75,13 @@ function AgentsPerformanceChart({ runtimestamp, agentNum, episodeNum }) {
         <YAxis
           yAxisId="left"
           tick={{ fill: "#8884d8" }}
+          tickFormatter={(value) => value.toFixed(3)}
           label={{
             value: "Accuracy",
-            angle: -90,
+            angle: 0,
             position: "insideLeft",
             stroke: "#8884d8",
+            dy: 190,
           }}
           domain={["auto", "auto"]}
         />
@@ -87,11 +89,19 @@ function AgentsPerformanceChart({ runtimestamp, agentNum, episodeNum }) {
           yAxisId="right"
           orientation="right"
           tick={{ fill: "#82ca9d" }}
+          tickFormatter={(value) => {
+            return Math.abs(value) >= 1e5
+              ? value.toExponential(2) // scientific notation with 2 decimal places
+              : value.toLocaleString(undefined, {
+                  maximumFractionDigits: 3,
+                });
+          }}
           label={{
             value: "FLOPs",
-            angle: 90,
+            angle: 0,
             position: "insideRight",
             stroke: "#82ca9d",
+            dy: 190,
           }}
           domain={["auto", "auto"]}
         />
