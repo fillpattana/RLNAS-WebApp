@@ -37,17 +37,6 @@ function AgentSelect({ agents, activeAgent, onAgentChange }) {
             ))}
           </Nav>
         </Navbar.Collapse>
-        {/* <NavDropdown
-          title="Node Properties"
-          autoClose="inside"
-          drop="down"
-          align={{ lg: "end" }}
-          id="diagram-properties"
-        >
-          <NavDropdown.Header as="div">
-            <Properties node={node} />
-          </NavDropdown.Header>
-        </NavDropdown> */}
       </Container>
     </Navbar>
   );
