@@ -1,4 +1,4 @@
-const topologicalSort = (graphData) => {
+export const topologicalSort = (graphData) => {
   if (
     !graphData ||
     !graphData.Graph ||
@@ -57,7 +57,7 @@ const topologicalSort = (graphData) => {
   return layerAssignments;
 };
 
-const barycenterOrdering = (graphData, layerAssignments) => {
+export const barycenterOrdering = (graphData, layerAssignments) => {
   if (
     !graphData ||
     !graphData.Graph ||
