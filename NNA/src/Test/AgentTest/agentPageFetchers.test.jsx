@@ -1,10 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import {
-  fetchAgentCount,
-  fetchEpisodeCount,
-  fetchIterationCount,
-  fetchGraphData,
-} from "./agentPageFetchers";
+import { fetchAgentCount } from "../../api/fetchAgentCount";
+import { fetchEpisodeCount } from "../../api/fetchEpisodeCount";
+import { fetchIterationCount } from "../../api/fetchIterationCount";
+import { fetchGraphData } from "../../api/fetchGraphData";
 
 const mockTimestamp = "2025-04-10T00:00:00Z";
 

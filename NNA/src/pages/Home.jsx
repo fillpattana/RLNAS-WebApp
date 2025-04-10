@@ -32,17 +32,20 @@ function Home() {
         (session) => session.sessionInfo.endtimestamp === null
       );
 
-      console.log(activeSession)
-  
+      console.log(activeSession);
+
       if (!activeSession) {
         console.warn("No active session to stop.");
         return;
       }
-  
+
       // Format current timestamp in 'YYYY-MM-DD HH:MM:SS.SSSSSS'
       const now = new Date();
-      const formattedTimestamp = now.toISOString().replace("T", " ").replace("Z", "");
-  
+      const formattedTimestamp = now
+        .toISOString()
+        .replace("T", " ")
+        .replace("Z", "");
+
       const response = await fetch(`http://localhost:3000/api/stopsession`, {
         method: "POST",
         headers: {
@@ -53,30 +56,30 @@ function Home() {
           endtimestamp: formattedTimestamp,
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to stop the session");
       }
-  
+
       console.log("Session stopped successfully");
       fetchData(); // Refresh session data
-      setShowStopAlert(true); // Optional: show success alert
+      setShowStopAlert(true);
     } catch (error) {
       console.error("Error stopping session:", error);
     }
   };
-  
+
   const fetchData = async () => {
     fetch("http://localhost:3000/api/ActiveSessions")
       .then((response) => response.json())
       .then((data) => setSessions(data))
       .catch((error) => console.error("Error fetching sessions:", error));
-  }
+  };
 
   useEffect(() => {
-      fetchData();
+    fetchData();
   }, []);
-  
+
   useEffect(() => {
     // WebSocket setup
     ws.current = new WebSocket("ws://localhost:3000");
@@ -84,13 +87,18 @@ function Home() {
     ws.current.onopen = () => {
       console.log("WebSocket connected Session Selection");
       // Subscribe to the "sessions_change" channel
-      ws.current.send(JSON.stringify({ type: "subscribe", channel: "sessions_change" }));
+      ws.current.send(
+        JSON.stringify({ type: "subscribe", channel: "sessions_change" })
+      );
     };
 
     ws.current.onmessage = (event) => {
       try {
         const realTimeData = JSON.parse(event.data);
-        console.log("Received WebSocket update in Session Selections:", realTimeData);
+        console.log(
+          "Received WebSocket update in Session Selections:",
+          realTimeData
+        );
 
         // Trigger data refresh on sessions_change
         fetchData();
@@ -113,7 +121,7 @@ function Home() {
     return () => {
       ws.current?.close();
     };
-  },[]);
+  }, []);
 
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "-";
@@ -156,35 +164,40 @@ function Home() {
       return () => clearTimeout(timer);
     }
   }, [showStopAlert]);
-  
 
   return (
     <div>
       <Container>
-      {showSuccessAlert && (
-        <Alert
-          variant="success"
-          dismissible
-          onClose={() => setShowSuccessAlert(false)}
-          className="mt-3"
-        >
-          <Alert.Heading>Session Created</Alert.Heading>
-          <p>Your new Neural Architecture Search session has been successfully created. 
-            <br/> Please wait a few moments, before viewing the active session from the tables.</p>
-        </Alert>
-      )}
-      {showStopAlert && (
-        <Alert
-          variant="success"
-          dismissible
-          onClose={() => setShowStopAlert(false)}
-          className="mt-3"
-        >
-          <Alert.Heading>Session Created</Alert.Heading>
-          <p>Active sessions has been stopped. 
-            <br/> You are now able to create a new session.</p>
-        </Alert>
-      )}
+        {showSuccessAlert && (
+          <Alert
+            variant="success"
+            dismissible
+            onClose={() => setShowSuccessAlert(false)}
+            className="mt-3"
+          >
+            <Alert.Heading>Session Created</Alert.Heading>
+            <p>
+              Your new Neural Architecture Search session has been successfully
+              created.
+              <br /> Please wait a few moments, before viewing the active
+              session from the tables.
+            </p>
+          </Alert>
+        )}
+        {showStopAlert && (
+          <Alert
+            variant="success"
+            dismissible
+            onClose={() => setShowStopAlert(false)}
+            className="mt-3"
+          >
+            <Alert.Heading>Session Created</Alert.Heading>
+            <p>
+              Active sessions has been stopped.
+              <br /> You are now able to create a new session.
+            </p>
+          </Alert>
+        )}
         <Row>
           <div className="elements-container">
             <Col>
@@ -261,7 +274,7 @@ function Home() {
             <Modal.Title>Create New Session</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <SessionForm onSuccess={handleSessionCreated} />
+            <SessionForm onSuccess={handleSessionCreated} />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowModal(false)}>
