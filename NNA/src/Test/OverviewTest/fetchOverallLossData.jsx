@@ -1,4 +1,4 @@
-export const fetchOverallLossData = async () => {
+export const fetchOverallLossData = async (runtimestamp) => {
   try {
     console.log("Fetching Loss Metrics...");
 
